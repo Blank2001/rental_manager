@@ -1,0 +1,68 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <section class="banner pb-4">
+        <div class="banner-card card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3 rounded-4" style="min-height: 30vh; background-image: <%= @company.hero_background_image %>; background-size: cover; background-repeat: no-repeat; background-position: center;"><span class="img-overlay opacity-40"></span>
+          <div class="content-overlay" style="max-width: 856px;"></div>
+        </div>
+      </section>
+      <div class="row">
+        <div class="avatar avatar-rounded avatar-2xl my-2 mx-0<%= !@company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+          <% if !@company.logo.attached? %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-store" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M3 21l18 0"></path>
+              <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"></path>
+              <path d="M5 21l0 -10.15"></path>
+              <path d="M19 21l0 -10.15"></path>
+              <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"></path>
+            </svg>
+          <% else %>
+            <%= image_tag(@company.logo) %>
+          <% end %>
+        </div>
+        <div class="col mx-4 my-4">
+          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %></h1>
+          <span>
+            <% if !current_renter.nil? %>
+              <%= link_to edit_company_path(@company), class: "btn btn-pill btn-info " do %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                  <path d="M13.5 6.5l4 4" />
+                </svg>
+                Edit Rental Company
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="<%= current_renter.nil? ? '' : 'col' %>">
+          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %>'s Vehicles</h1>
+        </div>
+        <% if !current_renter.nil? %>
+          <div class="text-end col">
+            <%= link_to vehicles_path(company_id: @company.id), method: :post, "data-turbo-method": :post, class: "btn btn-pill btn-primary text-white" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 5l0 14" />
+                <path d="M5 12l14 0" />
+              </svg>
+              New Vehicle Rental
+            <% end %>
+          </div>
+        <% end %>
+        <div class="row row-cards space-x">
+          <% @company.vehicles.each do | vehicle |%>
+            <%= render "vehicles/vehicle", vehicle: vehicle %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

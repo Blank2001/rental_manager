@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Caribbean Rentals<%= !@title.nil? ? " - #{@title}" : '' %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Caribbean Rentals">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta name="description" content='<%= !@description.nil? ? "#{@description}" : "" %>'>
+    <meta name="keywords" content='<%= !@keywords.nil? ? "#{@keywords}" : "" %>'>
+    <meta property="og:title" content="FlavaRun<%= !@title.nil? ? " - #{@title}" : '' %>"/>
+    <meta property="og:description" content='<%= !@description.nil? ? "#{@description}" : "" %>'/>
+    <meta property="og:image" content='<%# image_url('logos/FlavaRun(Logo).png') %>'/>
+    <meta property="og:url" content="https://flavarun.com" />
+    <meta property="og:type" content="website" />
+    <meta name="geo.region" content="<%= !@region.nil? ? "#{@region}" : "" %>" />
+    <meta name="geo.placename" content="<%= !@place_name.nil? ? "#{@place_name}" : "" %>" />
+    <meta name="geo.position" content="<%= !@geo_position.nil? ? "#{@geo_position}" : "" %>" />
+    <meta name="ICBM" content="16.7425, -62.1874" />
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+    <%# favicon_link_tag ('logos/FlavaRun(Logo).png'), type: 'image/png' %>
+    <link rel="canonical" href="https://flavarun.com/" />
+  </head>
+
+  <body class="theme-light">
+    <div class="page">
+      <%= yield %>      
+    </div>
+  </body>
+</html>

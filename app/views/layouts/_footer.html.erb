@@ -1,0 +1,40 @@
+<footer class="footer footer-transparent d-print-none">
+  <div class="container-xl">
+    <div class="col-sm-12 col-lg-auto mt-0 mt-lg-0">
+      <% if request.subdomain == "admin" %>
+        <ul class="list-inline list-inline-dots mb-3 text-start">
+          <li class="list-inline-item">
+            <%# link_to "Vendor Agreement", vendor_agreement_url, class: "link-secondary text-decoration-none text-dark" %>
+            <li class="list-inline-item">
+              <%# link_to "Contact Us", contact_url, class: "link-secondary text-decoration-none text-dark" %>
+            </li>
+          </li>
+        </ul>
+      <% elsif request.subdomain == "console" %>
+      <% else %>
+        <ul class="list-inline list-inline-dots mb-3 text-start">
+          <li class="list-inline-item">
+            <%# link_to "Privacy", privacy_policy_url, class: "link-secondary text-decoration-none text-dark" %>
+          </li>
+          <li class="list-inline-item">
+            <%# link_to "Terms of Use", terms_of_use_url, class: "link-secondary text-decoration-none text-dark" %>
+          </li>
+          <li class="list-inline-item">
+            <%# link_to "Cookies", cookie_policy_url, class: "link-secondary text-decoration-none text-dark" %>
+          </li>
+          <li class="list-inline-item">
+            <%# link_to "Refunds", refunds_policy_url, class: "link-secondary text-decoration-none text-dark" %>
+          </li>
+          <li class="list-inline-item">
+            <%# link_to "Contact Us", contact_url, class: "link-secondary text-decoration-none text-dark" %>
+          </li>
+        </ul>
+      <% end %>
+      <ul class="list-inline list-inline-dots mb-0 text-start">
+        <li class="list-inline-item text-dark">
+          Copyright © <%= DateTime.now.year == 2026 ? 2026 : "2026 - #{DateTime.now.year}" %> Caribbean Rentals, <%= link_to "Kinexia Inc",'https://kinexiainc.com', class: "link-primary text-decoration-none" %>. All rights reserved.
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,2 @@
+module Vehicles::BuildHelper
+end

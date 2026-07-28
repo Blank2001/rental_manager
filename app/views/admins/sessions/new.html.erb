@@ -1,0 +1,46 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container container-tight">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-dark text-white my-4" onClick="window.location.href = '<%= url_for(admin_root_path) %>';">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-battery-vertical-charging">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M7 18v-11a2 2 0 0 1 2 -2h.5a.5 .5 0 0 0 .5 -.5a.5 .5 0 0 1 .5 -.5h3a.5 .5 0 0 1 .5 .5a.5 .5 0 0 0 .5 .5h.5a2 2 0 0 1 2 2v11a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2" />
+                <path d="M12.667 8l-2.667 4h4l-2.667 4" />
+              </svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex flex-row text-dark justify-content-center align-items-center my-2 w-100">
+                <h1 class="h1">Login</h1>
+              </div>
+              <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <%= f.input :email, required: true, label: false, autofocus: true, input_html: { autocomplete: "email" }, class: "form-control" %>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Password</label>
+                  <%= f.input :password, required: true, label: false, input_html: { autocomplete: "current-password" }, class: "form-control" %>
+                </div>
+                <div class="mb-2">
+                  <%= f.input :remember_me, class: "form-check", as: :boolean if devise_mapping.rememberable? %>
+                </div>
+                <div class="form-footer mt-0">
+                  <%= f.button :submit, "Log in", class: "btn btn-dark w-100" %>
+                  <% if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+                    <%= link_to "Resend Confirmation", new_confirmation_path(resource_name), class: "btn w-100 my-2" %><br />
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

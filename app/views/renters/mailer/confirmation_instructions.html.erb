@@ -1,0 +1,18 @@
+<div class="container">
+  <img class="ax-center mt-4 w-24" src="" />
+  <h3 class="h3 ax-center text-success mb-4">Caribbean Rentals</h3>
+  <div class="card p-6 p-lg-10 ax-center space-y-4">
+    <h1 class="h3 fw-700 <%= @resource.class.name == 'Renter' ? 'text-danger' : 'text-blue-400' %> ax-center">
+      Welcome <%= @resource.full_name %>!
+    </h1>
+    <p>
+      You can confirm your <%= @resource.class.name == 'Renter' ? 'renter ' : (@resource.class.name == 'Customer' ? 'customer ' : '') %>account email through the link below: 
+    </p>
+
+    <%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token), class: "btn #{ @resource.class.name == 'Renter' ? 'btn-danger' : 'btn-blue-400' } text-white ax-center my-2 p-3 fw-700" %>
+  </div>
+  <div class="text-muted text-center my-6">
+    Caribbean Rentals<br>
+    Kinexia Inc.<br>
+  </div>
+</div>

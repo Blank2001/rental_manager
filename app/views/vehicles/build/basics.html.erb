@@ -1,0 +1,43 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <h1 class="text-center my-2 text-primary"><%= @vehicle.company.name %>'s Vehicle</h1>
+      <div class="card">
+        <%= simple_form_for(@vehicle, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+          <div class="card-body">
+            <%= render "layouts/errors", obj: @vehicle %>
+            <div class="form-inputs">
+              <h3 class="text-dark">Basic Vehicle Information</h3>
+              <div class="form-label"><strong>Category:</strong></div>
+              <%= f.input :category, collection: Vehicle::VEHICLE_CATEGORIES, required: true, autofocus: true, label: false %>
+              <div class="row g-3">
+                <div class="col-sm">
+                  <div class="form-label"><strong>Brand:</strong></div>
+                  <%= f.input :brand, required: true, autofocus: true, label: false %>
+                </div>
+                <div class="col-sm">
+                  <div class="form-label"><strong>Model:</strong></div>
+                  <%= f.input :model, required: true, autofocus: true, label: false %>
+                </div>
+                <div class="col-sm">
+                  <div class="form-label"><strong>Year:</strong></div>
+                  <%= f.input :year, required: true, autofocus: true, label: false %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent mt-auto row mx-0">
+            <div class="btn-list justify-content-end">
+              <%# link_to 'Previous Step', previous_wizard_path, class: "btn" %>
+              <%= f.button :button, "Next Step", class: "btn btn-primary", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+              <%# f.button :button, "Finish", class: "btn btn-success", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

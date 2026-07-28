@@ -1,0 +1,57 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container col-sm-8">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-dark text-white my-2" onClick="window.location.href = '<%= url_for(admin_root_path) %>';">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-battery-vertical-charging">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M7 18v-11a2 2 0 0 1 2 -2h.5a.5 .5 0 0 0 .5 -.5a.5 .5 0 0 1 .5 -.5h3a.5 .5 0 0 1 .5 .5a.5 .5 0 0 0 .5 .5h.5a2 2 0 0 1 2 2v11a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2" />
+                <path d="M12.667 8l-2.667 4h4l-2.667 4" />
+              </svg>
+            </div>
+          </div>
+          <h1 class="text-center my-2 text-dark">Sign Up</h1>
+          <div class="card">
+            <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+              <div class="card-body">
+                <%= render "admins/shared/error_messages", resource: resource %>
+                <div class="form-inputs">
+                  <h3 class="text-dark">Personal Information</h3>
+                  <div class="row g-3">
+                    <div class="col-sm">
+                      <div class="form-label"><strong>First Name:</strong></div>
+                      <%= f.input :first_name, required: true, autofocus: true, label: false %>
+                    </div>
+                    <div class="col-sm">
+                      <div class="form-label"><strong>Last Name:</strong></div>
+                      <%= f.input :last_name, required: true, autofocus: true, label: false %>
+                    </div>
+                  </div>
+                  <hr>
+                  <h3 class="text-dark">Login Information</h3>
+                  <div class="form-label"><strong>Email:</strong></div>
+                  <%= f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }, label: false %>
+                  <div class="form-label"><strong>Password:</strong></div>
+                  <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { autocomplete: "new-password" }, label: false %>
+                  <div class="form-label"><strong>Password Confirmation:</strong></div>
+                  <%= f.input :password_confirmation, required: true, input_html: { autocomplete: "new-password" }, label: false %>
+                </div>
+                <hr>
+                <p class="text-muted">If you already have an account click to <%= link_to "log in", new_session_path(resource_name), class:"text-decoration-none" %></p>
+              </div>
+              <div class="card-footer bg-transparent mt-auto row">
+                <div class="btn-list justify-content-end">
+                  <%= link_to "Back", :back, class: "btn" %>
+                  <%= f.button :submit, "Sign up", class: "btn btn-dark" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

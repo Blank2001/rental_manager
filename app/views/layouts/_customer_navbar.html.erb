@@ -1,0 +1,32 @@
+<header class="navbar navbar-expand-md d-print-none">
+  <div class="container-xl">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+      <%= image_tag('logos/FlavaRun(Logo).png', class:"navbar-brand-image") %>
+      <%= link_to "FlavaRun", drivers_root_url, class: "text-decoration-none" %>
+    </h1>
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+        <div class="navbar-nav">
+        </div>
+      </div>
+    </div>
+    <div class="navbar-nav flex-row order-md-last">
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open driver menu">
+          <span class="avatar avatar-sm bg-white"><%= current_driver.initials %></span>
+          <div class="d-none d-xl-block ps-2">
+            <div><%= current_driver.full_name %></div>
+            <div class="mt-1 small text-danger">Driver</div>
+          </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+          <%= link_to 'Profile', driver_profile_path, class:'dropdown-item', "data-turbo": false %>
+          <%= link_to 'Logout', destroy_driver_session_path, class:'dropdown-item', data: { turbo_method: :delete } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

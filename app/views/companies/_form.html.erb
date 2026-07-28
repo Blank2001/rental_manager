@@ -1,0 +1,22 @@
+<%= simple_form_for(@company) do |f| %>
+  <div class="card-body">
+    <%= render "layouts/errors", obj: company %>
+    <div class="form-inputs">
+    <%= f.input :renter_id, input_html: {value: current_renter.id}, as: :hidden %>
+    <%= f.input :logo %>
+    <%= f.input :hero_image %>
+    <%= f.input :name %>
+    <%= f.input :address %>
+    <%= f.input :country, collection: Company::SUPPORTED_COUNTRIES %>
+    <%= f.input :email %>
+    <%= f.input :phone_number %>
+  </div>
+
+  </div>
+  <div class="card-footer bg-transparent mt-auto row mx-0">
+    <div class="btn-list justify-content-end">
+      <%= link_to "Back", :back, class: "btn" %>
+      <%= f.button :submit, class: "btn btn-primary", "turbo-method": 'post' %>
+    </div>
+  </div>
+<% end %>

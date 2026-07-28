@@ -1,0 +1,39 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container col-sm-8">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-danger text-white my-2" onClick="window.location.href = '<%= url_for(renter_root_url) %>';">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" />
+              </svg> 
+            </div>
+          </div>
+          <h1 class="text-center my-2 text-danger">Renter Password Reset</h1>
+          <div class="card">
+            <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }, data: { turbo: false }) do |f| %>
+              <div class="card-body">
+                <%= render "renters/shared/error_messages", resource: resource %>
+                <div class="form-inputs">
+                <div class="form-label"><strong>Email:</strong></div>
+                <%= f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }, label: false %>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent mt-auto row">
+                <div class="btn-list justify-content-end">
+                  <%= link_to "Back", :back, class: "btn" %>
+                  <%= f.button :submit, "Send me reset password instructions", class: "btn btn-danger" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

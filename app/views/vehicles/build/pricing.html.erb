@@ -1,0 +1,61 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <h1 class="text-center my-2 text-primary"><%= @vehicle.company.name %>'s <%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></h1>
+      <div class="card">
+        <%= simple_form_for(@vehicle, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+          <div class="card-body">
+            <%= render "layouts/errors", obj: @vehicle %>
+            <div class="form-inputs">
+              <h3 class="text-dark">Rental Pricing</h3>
+              <div class="accordion accordion-flush my-2 p-0" id="accordion-flush">
+                <div class="accordion-item p-0">
+                  <div class="accordion-header p-0">
+                    <% if @vehicle.security_deposit_applicable %>
+                      <button class="accordion-button p-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-deposit" aria-expanded="true">
+                    <% else %>
+                      <button class="accordion-button p-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-deposit" aria-expanded="false">
+                    <% end %>
+                      <strong>Requires Security Deposit</strong>
+                      <div class="col-auto mt-2 ms-2 me-0">
+                        <label class="form-check form-switch form-switch-3">
+                          <input class="form-check-input" type="checkbox" name="vehicle[security_deposit_applicable]" id="vehicle_security_deposit_applicable" value="<%= @vehicle.security_deposit_applicable ? 1 : 0 %>" <%= @vehicle.security_deposit_applicable ? 'checked' : '' %>>
+                        </label>
+                      </div>
+                    </button>
+                  </div>
+                  <% if @vehicle.security_deposit_applicable %>
+                    <div id="collapse-deposit" class="accordion-collapse collapse show" data-bs-parent="#accordion-flush" style="">
+                  <% else %>
+                    <div id="collapse-deposit" class="accordion-collapse collapse" data-bs-parent="#accordion-flush">
+                  <% end %>
+                    <div class="accordion-body mx-0 my-4 p-0">
+                      <div class="form-label"><strong>Security Deposit Amount:</strong></div>
+                      <%= f.input :security_deposit, required: true, autofocus: true, label: false %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-label"><strong>Rental Daily Rate:</strong></div>
+              <%= f.input :daily_rate, required: true, autofocus: true, label: false %>
+              <div class="form-label"><strong>Rental Weekly Rate:</strong></div>
+              <%= f.input :weekly_rate, required: true, autofocus: true, label: false %>
+              <div class="form-label"><strong>Rental Monthly Rate:</strong></div>
+              <%= f.input :monthly_rate, required: true, autofocus: true, label: false %>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent mt-auto row mx-0">
+            <div class="btn-list justify-content-end">
+              <%= link_to 'Previous Step', previous_wizard_path, class: "btn" %>
+              <%# f.button :button, "Next Step", class: "btn btn-primary", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+              <%= f.button :button, "Finish", class: "btn btn-success", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

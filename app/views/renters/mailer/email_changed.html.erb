@@ -1,0 +1,18 @@
+<div class="container">
+  <img class="ax-center mt-4 w-24" src="" />
+  <h3 class="h3 ax-center text-success mb-4">Caribbean Rentals</h3>
+  <div class="card p-6 p-lg-10 ax-center space-y-4">
+    <h1 class="h3 fw-700 <%= @resource.class.name == 'Renter' ? 'text-danger' : 'text-blue-400' %> px-4">
+      Hello <%= @resource.full_name %>!
+    </h1>
+    <% if @resource.try(:unconfirmed_email?) %>
+      <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+    <% else %>
+      <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+    <% end %>
+  </div>
+  <div class="text-muted text-center my-6">
+    Caribbean Rentals<br>
+    Kinexia Inc.<br>
+  </div>
+</div>

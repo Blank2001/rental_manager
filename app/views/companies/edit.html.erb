@@ -1,0 +1,14 @@
+<% content_for :title, "Edit #{@company.name}" %>
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <h1 class="text-primary text-center">Edit <%= @company.name %></h1>
+      <div class="card">
+        <%= render "form", company: @company %>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

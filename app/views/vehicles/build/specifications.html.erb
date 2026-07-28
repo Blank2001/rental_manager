@@ -1,0 +1,35 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <h1 class="text-center my-2 text-primary"><%= @vehicle.company.name %>'s <%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></h1>
+      <div class="card">
+        <%= simple_form_for(@vehicle, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+          <div class="card-body">
+            <%= render "layouts/errors", obj: @vehicle %>
+            <div class="form-inputs">
+              <h3 class="text-dark">Vehicle Specifications</h3>
+              <div class="form-label"><strong>Transmission Type:</strong></div>
+              <%= f.input :transmission_type, collection: Vehicle::TRANSMISSION_TYPES, required: true, autofocus: true, label: false %>
+              <div class="form-label"><strong>Engine Fuel Type:</strong></div>
+              <%= f.input :fuel_type, collection: Vehicle::FUEL_TYPE, required: true, autofocus: true, label: false %>
+              <div class="form-label"><strong>Number of Seats:</strong></div>
+              <%= f.input :seats, required: true, autofocus: true, label: false %>
+              <div class="form-label"><strong>Number of Doors:</strong></div>
+              <%= f.input :doors, required: true, autofocus: true, label: false %>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent mt-auto row mx-0">
+            <div class="btn-list justify-content-end">
+              <%= link_to 'Previous Step', previous_wizard_path, class: "btn" %>
+              <%= f.button :button, "Next Step", class: "btn btn-primary", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+              <%# f.button :button, "Finish", class: "btn btn-success", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

@@ -1,0 +1,19 @@
+<div class="container">
+  <img class="ax-center mt-4 w-24" src="https://flavarun.com/assets/logos/FlavaRun(Logo)-7c0ae6f68399fc1d44f21532683dd1f5121ea63d11b3a3de421a0a6b076df247.png" />
+  <h3 class="h3 ax-center text-success mb-4">FlavaRun</h3>
+  <div class="card p-6 p-lg-10 ax-center space-y-4">
+    <h1 class="h3 fw-700 <%= @resource.class.name == 'Renter' ? 'text-warning' : (@resource.class.name == 'Customer' ? 'text-blue-400' : (@resource.class.name == 'Driver' ? 'text-danger' : 'text-primary')) %> ax-center">
+      Welcome <%= @resource.full_name %>!
+    </h1>
+    <p>
+      You can confirm your <%= @resource.class.name == 'Renter' ? 'merchant ' : (@resource.class.name == 'Driver' ? 'driver ' : '') %>account email through the link below: 
+    </p>
+
+    <%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token), class: "btn #{ @resource.class.name == 'Renter' ? 'btn-warning' : (@resource.class.name == 'Customer' ? 'btn-blue-400' : (@resource.class.name == 'Driver' ? 'bg-danger' : 'bg-primary')) } text-white ax-center my-2 p-3 fw-700" %>
+  </div>
+  <div class="text-muted text-center my-6">
+    FlavaRun<br>
+    Kinexia Inc.<br>
+    Montserrat<br>
+  </div>
+</div>

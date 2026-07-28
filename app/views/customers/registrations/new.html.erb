@@ -1,0 +1,64 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container col-sm-8">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-azure text-white my-2" onClick="window.location.href = '<%= url_for(root_path) %>';">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+              </svg>
+            </div>
+          </div>
+          <h1 class="text-center my-2 text-azure">Sign Up</h1>
+          <div class="card">
+            <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+              <div class="card-body">
+                <%= render "customers/shared/error_messages", resource: resource %>
+                <div class="form-inputs">
+                  <h3 class="text-azure">Personal Information</h3>
+                  <div class="row g-3">
+                    <div class="col-sm">
+                      <div class="form-label"><strong>First Name:</strong></div>
+                      <%= f.input :first_name, required: true, autofocus: true, label: false %>
+                    </div>
+                    <div class="col-sm">
+                      <div class="form-label"><strong>Last Name:</strong></div>
+                      <%= f.input :last_name, required: true, autofocus: true, label: false %>
+                    </div>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-sm">
+                      <div class="form-label"><strong>Contact Number:</strong></div>
+                      <%= f.input :contact_number, required: true, hint: "This number will be used to send you notifications through whatsapp. Enter in international number format for example: 16644962001, 447911123456", autofocus: true, label: false %>
+                    </div>
+                  </div>
+                  <span>By continuing, you agree to Caribbean Rental’s <%# link_to "Terms of Use", terms_of_use_url, class: "text-dark" %> and acknowledge our <%# link_to "Privacy Policy", privacy_policy_url, class: "text-dark" %>.</span>
+                  <hr>
+                  <h3 class="text-azure">Login Information</h3>
+                  <div class="form-label"><strong>Email:</strong></div>
+                  <%= f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }, label: false %>
+                  <div class="form-label"><strong>Password:</strong></div>
+                  <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { autocomplete: "new-password" }, label: false %>
+                  <div class="form-label"><strong>Password Confirmation:</strong></div>
+                  <%= f.input :password_confirmation, required: true, input_html: { autocomplete: "new-password" }, label: false %>
+                </div>
+                <hr>
+                <p class="text-muted">If you already have an account click to <%= link_to "log in", new_session_path(resource_name), class:"text-decoration-none" %></p>
+              </div>
+              <div class="card-footer bg-transparent mt-auto row">
+                <div class="btn-list justify-content-end">
+                  <%= link_to "Back", :back, class: "btn" %>
+                  <%= f.button :submit, "Sign up", class: "btn btn-azure" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+	<div class="page-body">
+	    <%= render 'layouts/messages' %> 
+	    <div class="container-xl">
+			<h1>Renter Console</h1>
+			<div class="card">
+				<div class="card-header">
+			        <h2 class="card-title">Rental Companies</h2>
+			        <div class="card-actions">
+			        	<%= link_to new_company_path, class: "text-primary px-0 mx-0" do %>
+			        		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			        			<path d="M12 5l0 14" />
+				        		<path d="M5 12l14 0" />
+			        		</svg>
+			        	<% end %>
+			        </div>
+			    </div>
+			    <div class="list-group list-group-flush">
+					<% @companies.each do | company | %>
+			          	<%= render 'companies/company', company: company %>
+					<% end %>          
+				</div>
+			</div>
+		</div>
+	</div>
+	<%= render 'layouts/footer' %>
+</div>

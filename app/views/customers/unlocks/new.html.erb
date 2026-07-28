@@ -1,0 +1,38 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container col-sm-8">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-azure text-white my-2" onClick="window.location.href = '<%= url_for(root_path) %>';">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+              </svg>
+            </div>
+          </div>
+          <h1 class="text-center my-2 text-azure">Account Unlock</h1>
+          <div class="card">
+            <%= simple_form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }, data: { turbo: false }) do |f| %>
+              <div class="card-body">
+                <%= render "customers/shared/error_messages", resource: resource %>
+                <div class="form-inputs">
+                <div class="form-label"><strong>Email:</strong></div>
+                <%= f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }, label: false %>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent mt-auto row">
+                <div class="btn-list justify-content-end">
+                  <%= link_to "Back", :back, class: "btn" %>
+                  <%= f.button :submit, "Resend unlock instructions", class: "btn btn-azure" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

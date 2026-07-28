@@ -1,0 +1,55 @@
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="page-center">
+        <div class="container container-tight">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="avatar avatar-rounded avatar-lg bg-azure text-white my-4" onClick="window.location.href = '<%= url_for(root_path) %>';">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+              </svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex flex-row text-azure justify-content-center align-items-center my-2 w-100">
+                <h1 class="h1">Login</h1>
+              </div>
+              <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <%= f.input :email, required: true, label: false, autofocus: true, input_html: { autocomplete: "email" }, class: "form-control" %>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Password</label>
+                  <%= f.input :password, required: true, label: false, input_html: { autocomplete: "current-password" }, class: "form-control" %>
+                </div>
+                <div class="mb-2">
+                  <%= f.input :remember_me, class: "form-check", as: :boolean if devise_mapping.rememberable? %>
+                </div>
+                <div class="form-footer mt-0">
+                  <%= f.button :submit, "Log in", class: "btn btn-azure w-100" %>
+                  <div class="row my-2">
+                    <div class="col-6">
+                      <% if devise_mapping.recoverable? && controller_name != 'passwords' %>
+                        <%= link_to "Reset Password", new_password_path(resource_name), class: "btn w-100" %><br />
+                      <% end %>
+                    </div>
+                    <div class="col-6">
+                      <% if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+                        <%= link_to "Resend Confirmation", new_confirmation_path(resource_name), class: "btn w-100" %><br />
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
