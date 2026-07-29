@@ -11,13 +11,15 @@
       <div class="row">
         <div class="avatar avatar-rounded avatar-2xl my-2 mx-0<%= !@company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
           <% if !@company.logo.attached? %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-store" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M3 21l18 0"></path>
-              <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"></path>
-              <path d="M5 21l0 -10.15"></path>
-              <path d="M19 21l0 -10.15"></path>
-              <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M3 21l18 0" />
+              <path d="M5 21v-14l8 -4v18" />
+              <path d="M19 21v-10l-6 -4" />
+              <path d="M9 9l0 .01" />
+              <path d="M9 12l0 .01" />
+              <path d="M9 15l0 .01" />
+              <path d="M9 18l0 .01" />
             </svg>
           <% else %>
             <%= image_tag(@company.logo) %>
@@ -42,7 +44,7 @@
       <hr>
       <div class="row">
         <div class="<%= current_renter.nil? ? '' : 'col' %>">
-          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %>'s Vehicles</h1>
+          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold">Vehicles</h1>
         </div>
         <% if !current_renter.nil? %>
           <div class="text-end col">

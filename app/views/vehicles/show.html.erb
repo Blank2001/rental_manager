@@ -1,8 +1,99 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @vehicle %>
-
-<div>
-  <%= link_to "Back to vehicles", :back %>
-
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="row">
+        <h1 class="text-primary display-6 mt-0 mb-4 ms-4 col"><strong><%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></strong></h1>
+        <span class="col text-end">
+          <% if !current_renter.nil? %>
+            <%= link_to vehicle_build_url(vehicle_id: @vehicle.id, id: :basics), class: "btn btn-pill btn-info " do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                <path d="M13.5 6.5l4 4" />
+              </svg>
+              Edit Vehicle
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+      <section class="banner pb-4">
+        <div class="banner-card card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden rounded-4" style="min-height: 50vh; background-image: url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyfGVufDB8fDB8fHww); background-size: cover; background-repeat: no-repeat; background-position: center;"><span class="img-overlay opacity-40"></span>
+          <div class="content-overlay" style="max-width: 856px;"></div>
+        </div>
+      </section>
+      <h2 class="ms-4">
+        <span class="badge bg-blue-lt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M5 8l0 8" />
+            <path d="M12 8l0 8" />
+            <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
+          </svg>
+          <%= @vehicle.transmission_type %>
+        </span>
+        <span class="badge bg-blue-lt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
+            <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
+            <path d="M3 20l12 0" />
+            <path d="M18 7v1a1 1 0 0 0 1 1h1" />
+            <path d="M4 11l10 0" />
+          </svg>
+          <%= @vehicle.fuel_type %>
+        </span>
+        <span class="badge bg-blue-lt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M13 14h2" />
+            <path d="M19 10h-16" />
+            <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
+          </svg>
+          <%= @vehicle.doors %> Door
+        </span>
+        <span class="badge bg-blue-lt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+          </svg>
+          <%= @vehicle.seats %> Seats
+        </span>
+      </h2>
+      <hr class="mt-4 mb-2">
+      <div class="row my-0 ms-4" onclick="window.location.href = '<%= url_for(@vehicle.company) %>';">
+        <div class="avatar avatar-rounded avatar-xl my-2 mx-0<%= !@vehicle.company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+          <% if !@vehicle.company.logo.attached? %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M3 21l18 0" />
+              <path d="M5 21v-14l8 -4v18" />
+              <path d="M19 21v-10l-6 -4" />
+              <path d="M9 9l0 .01" />
+              <path d="M9 12l0 .01" />
+              <path d="M9 15l0 .01" />
+              <path d="M9 18l0 .01" />
+            </svg>
+          <% else %>
+            <%= image_tag(@vehicle.company.logo) %>
+          <% end %>
+        </div>
+        <div class="col mx-4 mt-4 mb-2">
+          <span class="text-muted">Rented by:</span>
+          <h1 class="text-primary fw-bold"><%= @vehicle.company.name %></h1>
+        </div>
+      </div>
+      <hr class="mt-2 mb-4">
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
 </div>
