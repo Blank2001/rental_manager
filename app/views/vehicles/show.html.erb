@@ -1,13 +1,24 @@
 <%= render 'layouts/renter_navbar' %>
 <div class="d-flex flex-column h-100 page-wrapper">
-  <div class="page-body">
+  <div class="page-body mt-0">
     <%= render 'layouts/messages' %> 
     <div class="container-xl">
       <div class="row">
+        <% if request.referrer.present? && URI(request.referer).path != request.path %>
+          <span class="col-1">
+            <%= link_to :back, class: "btn btn-md btn-pill" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M15 6l-6 6l6 6" />
+              </svg>
+              Back
+            <% end %>
+          </span>
+        <% end %>
         <h1 class="text-primary display-6 mt-0 mb-4 ms-4 col"><strong><%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></strong></h1>
         <span class="col text-end">
           <% if !current_renter.nil? %>
-            <%= link_to vehicle_build_url(vehicle_id: @vehicle.id, id: :basics), class: "btn btn-pill btn-info " do %>
+            <%= link_to vehicle_build_url(vehicle_id: @vehicle.slug, id: :basics), class: "btn btn-md btn-pill btn-info " do %>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
@@ -15,14 +26,42 @@
               </svg>
               Edit Vehicle
             <% end %>
+            <%= link_to photos_vehicle_url(@vehicle), class: "btn btn-md btn-pill btn-pink " do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-library-photo">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M7 5.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666" />
+                <path d="M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1" />
+                <path d="M17 7h.01" />
+                <path d="M7 13l3.644 -3.644a1.21 1.21 0 0 1 1.712 0l3.644 3.644" />
+                <path d="M15 12l1.644 -1.644a1.21 1.21 0 0 1 1.712 0l2.644 2.644" />
+              </svg>
+              Manage Photos
+            <% end %>
           <% end %>
         </span>
       </div>
-      <section class="banner pb-4">
-        <div class="banner-card card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden rounded-4" style="min-height: 50vh; background-image: url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyfGVufDB8fDB8fHww); background-size: cover; background-repeat: no-repeat; background-position: center;"><span class="img-overlay opacity-40"></span>
-          <div class="content-overlay" style="max-width: 856px;"></div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-7">
+          <div class="card border-0 rounded-4 overflow-hidden h-100" style="min-height: 45vh; background-image: url(<%= @vehicle.photos.count > 0 ? @vehicle.photos.first.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;">
+          </div>
         </div>
-      </section>
+        <div class="col-md-5">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 1 ? @vehicle.photos.second.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 2 ? @vehicle.photos.third.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 3 ? @vehicle.photos.fourth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 4 ? @vehicle.photos.fifth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <h2 class="ms-4">
         <span class="badge bg-blue-lt">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">

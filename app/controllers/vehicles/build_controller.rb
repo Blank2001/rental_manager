@@ -5,16 +5,16 @@ class Vehicles::BuildController < ApplicationController
 	steps :basics, :specifications, :pricing
 
 	def show
-		@vehicle = Vehicle.find(params[:vehicle_id].to_i)
+		@vehicle = Vehicle.friendly.find(params[:vehicle_id])
 		@vehicle.current_step = step.to_s
 		render_wizard
 	end
 
 	def update
-		if Vehicle.where(id: params[:vehicle_id].to_i).count == 0
+		if Vehicle.where(slug: params[:vehicle_id]).count == 0
 			redirect_to admin_root
 		else
-			@vehicle = Vehicle.find(params[:vehicle_id].to_i)
+			@vehicle = Vehicle.friendly.find(params[:vehicle_id])
 		end
 
 		@vehicle.current_step = step.to_s
@@ -33,7 +33,7 @@ class Vehicles::BuildController < ApplicationController
 
 	def create
 		@vehicle = Vehicle.create
-		redirect_to wizard_path(:basics, vehicle_id: @vehicle.id)
+		redirect_to wizard_path(:basics, vehicle_id: @vehicle.slug)
 	end
 
 	def finish_wizard_path

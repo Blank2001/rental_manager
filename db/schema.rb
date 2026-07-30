@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_27_201411) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_30_210328) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,6 +97,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_27_201411) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "photos", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "position"
+    t.datetime "updated_at", null: false
+    t.bigint "vehicle_id", null: false
+    t.index ["vehicle_id"], name: "index_photos_on_vehicle_id"
+  end
+
   create_table "renters", force: :cascade do |t|
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
@@ -130,16 +138,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_27_201411) do
     t.integer "seats"
     t.float "security_deposit"
     t.boolean "security_deposit_applicable"
+    t.string "slug"
     t.string "status"
     t.string "transmission_type"
     t.datetime "updated_at", null: false
     t.float "weekly_rate"
     t.integer "year"
     t.index ["company_id"], name: "index_vehicles_on_company_id"
+    t.index ["slug"], name: "index_vehicles_on_slug", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "companies", "renters"
+  add_foreign_key "photos", "vehicles"
   add_foreign_key "vehicles", "companies"
 end

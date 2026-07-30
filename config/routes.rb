@@ -53,6 +53,11 @@ Rails.application.routes.draw do
     resources :companies, except: [:index]
     resources :vehicles, except: [:index, :new, :edit, :update] do
       resources :build, only: [:show, :update], controller: 'vehicles/build'
+      member do
+        get 'photos'
+        post 'add_photo'
+        patch 'reorder_photos'
+      end
     end
     devise_for :renters, path: 'renters', skip: [:registrations, :sessions], controllers: {
       confirmations: 'renters/confirmations',
