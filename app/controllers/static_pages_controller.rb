@@ -3,6 +3,7 @@ class StaticPagesController < ApplicationController
   before_action :require_renter, only: %i[ renter_console ]
   
   def home
+    @vehicles = Vehicle.all
   end
   
   def admin_console

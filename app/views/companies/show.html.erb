@@ -1,4 +1,8 @@
-<%= render 'layouts/renter_navbar' %>
+<% if request.subdomain == "admin" %>
+  <%= render 'layouts/renter_navbar' %>
+<% else %>
+  <%= render 'layouts/navbar' %>
+<% end %>
 <div class="d-flex flex-column h-100 page-wrapper">
   <div class="page-body mt-0">
     <%= render 'layouts/messages' %> 
@@ -26,7 +30,7 @@
           <% end %>
         </div>
         <div class="col mx-4 my-4">
-          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %></h1>
+          <h1 class="<%= current_renter.nil? ? 'display-5 my-4' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %></h1>
           <span>
             <% if !current_renter.nil? %>
               <%= link_to edit_company_path(@company), class: "btn btn-pill btn-info " do %>
@@ -41,10 +45,12 @@
           </span>
         </div>
       </div>
-      <hr>
+      <% if request.subdomain == "admin" %>
+        <hr>
+      <% end %>
       <div class="row">
         <div class="<%= current_renter.nil? ? '' : 'col' %>">
-          <h1 class="<%= current_renter.nil? ? 'display-5 my-2' : 'display-6 mt-0' %> text-primary fw-bold">Vehicles</h1>
+          <h1 class="<%= current_renter.nil? ? 'display-6 my-2' : 'display-6 mt-0' %> fw-bold"><%= @company.name %>'s Vehicles</h1>
         </div>
         <% if !current_renter.nil? %>
           <div class="text-end col">

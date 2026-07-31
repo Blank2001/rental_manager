@@ -1,6 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
-  before_action :require_renter
+  before_action :require_renter, except: %i[ show ]
 
   # GET /companies or /companies.json
   def index

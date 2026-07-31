@@ -23,6 +23,16 @@ Rails.application.routes.draw do
     post 'customer_login', to: 'customers/sessions#create', as: :customer_session
     delete 'customer_logout', to: 'customers/sessions#destroy', as: :destroy_customer_session
   end
+  
+  resources :companies, except: [:index]
+  resources :vehicles, except: [:index, :new, :edit, :update] do
+    resources :build, only: [:show, :update], controller: 'vehicles/build'
+    member do
+      get 'photos'
+      post 'add_photo'
+      patch 'reorder_photos'
+    end
+  end
 
   constraints subdomain: 'console' do
     require 'sidekiq/web'
@@ -50,15 +60,6 @@ Rails.application.routes.draw do
   end
 
   constraints subdomain: 'admin' do
-    resources :companies, except: [:index]
-    resources :vehicles, except: [:index, :new, :edit, :update] do
-      resources :build, only: [:show, :update], controller: 'vehicles/build'
-      member do
-        get 'photos'
-        post 'add_photo'
-        patch 'reorder_photos'
-      end
-    end
     devise_for :renters, path: 'renters', skip: [:registrations, :sessions], controllers: {
       confirmations: 'renters/confirmations',
       passwords: 'renters/passwords',

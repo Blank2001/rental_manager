@@ -1,3 +1,27 @@
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons/font/bootstrap-icons';
 @import '@tabler/core/dist/css/tabler';
+
+/* 1. Prevent nested segments from bleeding past the pill's rounded edges */
+.rounded-pill {
+  overflow: hidden !important;
+}
+
+
+.divide-x > * + * {
+  border-left: none !important; /* Remove the full-height default border */
+}
+
+.divide-x > * + *::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 25%; /* Vertically centers the line */
+  height: 50%; /* Limits the line to 32px tall inside the 64px pill */
+  border-left: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 3. Strip Simple Form / Bootstrap wrapper heights that stretch the container */
+.divide-x .mb-0, 
+.divide-x .form-group {
+  margin-bottom: 0 !important;
+  height: auto !important;
+}

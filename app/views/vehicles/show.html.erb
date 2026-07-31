@@ -1,4 +1,8 @@
-<%= render 'layouts/renter_navbar' %>
+<% if request.subdomain == "admin" %>
+  <%= render 'layouts/renter_navbar' %>
+<% else %>
+  <%= render 'layouts/navbar' %>
+<% end %>
 <div class="d-flex flex-column h-100 page-wrapper">
   <div class="page-body mt-0">
     <%= render 'layouts/messages' %> 
