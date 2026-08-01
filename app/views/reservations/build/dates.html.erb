@@ -1,0 +1,23 @@
+<div class="d-flex flex-column px-6">
+	<h1 class="text-start ms-2 mb-3"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
+	<div class="card">
+        <%= simple_form_for(@reservation, :url => local_assigns[:url] || wizard_path,html: { method: :put, data: { controller: "search-bar" } }, data: { turbo: false } ) do |f| %>
+	        <div class="d-flex align-items-center bg-white w-100 overflow-hidden">
+				<div id="collection_container" class="d-flex flex-column flex-grow-1 px-4 py-2 text-start cursor-pointer my-2 ms-2 border-end" data-search-bar-target="collectionWrapper" data-action="click->search-bar#openCalendar">
+					<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Collection Date</label>
+					<%= f.input :collection_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "collection_date_input", readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
+				</div>
+				<div id="return_container" class="d-flex align-items-center justify-content-between flex-grow-1 ps-4 pe-2 py-2 cursor-pointer my-2" data-search-bar-target="returnWrapper" data-action="click->search-bar#openCalendar">
+					<div class="d-flex flex-column flex-grow-1 text-start me-2">
+						<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Return Date</label>
+						<%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "return_date_input", readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
+					</div>
+				</div>
+			</div>
+			<hr class="mt-0">
+			<div class="text-center">
+				<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 py-2 mb-4" %>
+			</div>
+		<% end %>
+	</div>
+</div>

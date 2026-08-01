@@ -24,6 +24,9 @@ Rails.application.routes.draw do
     delete 'customer_logout', to: 'customers/sessions#destroy', as: :destroy_customer_session
   end
   
+  resources :reservations, except: [:new, :edit, :update] do
+    resources :build, only: [:show, :update], controller: 'vehicles/build'
+  end
   resources :companies, except: [:index]
   resources :vehicles, except: [:index, :new, :edit, :update] do
     resources :build, only: [:show, :update], controller: 'vehicles/build'

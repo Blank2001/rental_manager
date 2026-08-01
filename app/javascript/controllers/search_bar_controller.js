@@ -1,4 +1,3 @@
-// app/javascript/controllers/search_bar_controller.js
 import { Controller } from "@hotwired/stimulus"
 import Litepicker from "litepicker"
 
@@ -8,7 +7,6 @@ export default class extends Controller {
   connect() {
     const firstInput = document.getElementById('collection_date_input')
     const secondInput = document.getElementById('return_date_input')
-
     if (!firstInput || !secondInput) return
 
     this.picker = new Litepicker({
@@ -26,6 +24,10 @@ export default class extends Controller {
         picker.on('selected', (date1, date2) => {
           firstInput.value = date1.format('YYYY-MM-DD')
           secondInput.value = date2.format('YYYY-MM-DD')
+          
+          // Programmatic updates do not trigger native HTML event listeners.
+          // This line forces the form submission immediately after selection.
+          firstInput.form.requestSubmit()
         })
       }
     })

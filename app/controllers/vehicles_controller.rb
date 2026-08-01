@@ -9,6 +9,11 @@ class VehiclesController < ApplicationController
 
   # GET /vehicles/1 or /vehicles/1.json
   def show
+    if current_customer.nil?
+      @reservation = Reservation.new(vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.tomorrow : params[:return_date]))
+    elsif request.subdomain != "admin" || request.subdomain != "console"
+      @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.tomorrow : params[:return_date]))
+    end
   end
 
   # GET /vehicles/new

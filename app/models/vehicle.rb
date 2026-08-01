@@ -23,4 +23,12 @@ class Vehicle < ApplicationRecord
     return false if self.current_step.nil?
     STEPS.index(step.to_s) <= STEPS.index(self.current_step.to_s)
   end
+
+  def self.available(collection_date, return_date)
+    unavailable_ids = []
+    Reservation.where(collection_date: collection_date..return_date, return_date: collection_date..return_date).each do | reservation |
+      unavailable_ids.push(reservation.vehicle_id)
+    end
+    return self.where.not(id: unavailable_ids)
+  end
 end

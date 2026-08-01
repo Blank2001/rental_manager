@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_30_210328) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_170844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -125,6 +125,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_30_210328) do
     t.index ["reset_password_token"], name: "index_renters_on_reset_password_token", unique: true
   end
 
+  create_table "reservations", force: :cascade do |t|
+    t.date "collection_date"
+    t.string "collection_location"
+    t.json "cost", default: {}
+    t.datetime "created_at", null: false
+    t.bigint "customer_id", null: false
+    t.date "return_date"
+    t.string "return_location"
+    t.string "status"
+    t.datetime "updated_at", null: false
+    t.bigint "vehicle_id", null: false
+    t.index ["customer_id"], name: "index_reservations_on_customer_id"
+    t.index ["vehicle_id"], name: "index_reservations_on_vehicle_id"
+  end
+
   create_table "vehicles", force: :cascade do |t|
     t.string "brand"
     t.string "category"
@@ -152,5 +167,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_30_210328) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "companies", "renters"
   add_foreign_key "photos", "vehicles"
+  add_foreign_key "reservations", "customers"
+  add_foreign_key "reservations", "vehicles"
   add_foreign_key "vehicles", "companies"
 end
