@@ -1,7 +1,7 @@
 <div class="d-flex flex-column px-6">
-	<h1 class="text-start ms-2 mb-3"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
-	<div class="card">
-        <%= simple_form_for(@reservation, :url => local_assigns[:url] || wizard_path,html: { method: :put, data: { controller: "search-bar" } }, data: { turbo: false } ) do |f| %>
+	<h1 class="text-start ms-2"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
+	<div class="card"> 
+        <%= simple_form_for(@reservation, :url => local_assigns[:url], html: { method: :post, data: { controller: "search-bar" } }, data: { turbo: false } ) do |f| %>
 	        <div class="d-flex align-items-center bg-white w-100 overflow-hidden">
 				<div id="collection_container" class="d-flex flex-column flex-grow-1 px-4 py-2 text-start cursor-pointer my-2 ms-2 border-end" data-search-bar-target="collectionWrapper" data-action="click->search-bar#openCalendar">
 					<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Collection Date</label>
@@ -14,9 +14,16 @@
 					</div>
 				</div>
 			</div>
+		    <%= f.input :customer_id, input_html: { value: current_customer.id }, as: :hidden if !current_customer.nil? %>
+		    <%= f.input :vehicle_id, input_html: { value: @reservation.vehicle.id }, as: :hidden %>
+		   	<% if request.subdomain == "admin" %>
+			    <%= f.input :res_type, collection: Reservation::RESERVATION_TYPES %>		   	
+		   	<% else %>
+			    <%= f.input :res_type, input_html: { value: "online" }, as: :hidden %>
+		    <% end %>
 			<hr class="mt-0">
 			<div class="text-center">
-				<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 py-2 mb-4" %>
+				<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 py-2 mb-4", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." }  %>
 			</div>
 		<% end %>
 	</div>

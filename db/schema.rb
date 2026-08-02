@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_02_153734) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_02_205215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -130,13 +130,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_153734) do
     t.string "collection_location"
     t.json "cost", default: {}
     t.datetime "created_at", null: false
-    t.bigint "customer_id", null: false
+    t.bigint "customer_id"
+    t.string "res_type", default: "online"
     t.date "return_date"
     t.string "return_location"
+    t.string "slug"
     t.string "status"
     t.datetime "updated_at", null: false
     t.bigint "vehicle_id", null: false
     t.index ["customer_id"], name: "index_reservations_on_customer_id"
+    t.index ["slug"], name: "index_reservations_on_slug", unique: true
     t.index ["vehicle_id"], name: "index_reservations_on_vehicle_id"
   end
 

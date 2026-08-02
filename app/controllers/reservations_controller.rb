@@ -1,5 +1,5 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: %i[ show edit update destroy ]
+  before_action :set_reservation, only: %i[ show destroy ]
 
   # GET /reservations or /reservations.json
   def index
@@ -21,17 +21,20 @@ class ReservationsController < ApplicationController
 
   # POST /reservations or /reservations.json
   def create
-    # if current_customer.nil?
-    #   @reservation = Reservation.new(vehicle_id: params[:vehicle_id].to_i)
-    # else
-    #   @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: params[:vehicle_id].to_i)
-    # end
-    puts params
-    # if @reservation.save(validate: false)
-    #   redirect_to vehicle_build_url(vehicle_id: @reservation.id, id: :dates)
-    # else
-    #   redirect_to admin_root, alert: "Failed to initialize reservation creation."
-    # end
+    if current_customer.nil?
+      redirect_to new_customer_session_url
+      flash[:alert] = "Please log in to make any reservations."
+    else
+      @reservation = Reservation.new(reservation_params)
+    end
+    if @reservation.save(validate: true)
+      redirect_to reservation_build_url(reservation_id: @reservation.slug, id: :location)
+    else
+      respond_to do |format|
+        format.html { redirect_to @reservation.vehicle, alert: @reservation.errors.full_messages.to_sentence, status: :see_other }
+        format.json { render json: @reservation.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PATCH/PUT /reservations/1 or /reservations/1.json

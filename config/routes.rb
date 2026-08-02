@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   end
   
   resources :reservations, except: [:new, :edit, :update] do
-    resources :build, only: [:show, :update], controller: 'vehicles/build'
+    resources :build, only: [:show, :update], controller: 'reservations/build'
   end
   resources :companies, except: [:index]
   resources :vehicles, except: [:index, :new, :edit, :update] do

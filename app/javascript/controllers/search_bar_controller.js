@@ -12,7 +12,7 @@ export default class extends Controller {
     this.picker = new Litepicker({
       element: this.collectionWrapperTarget,
       elementEnd: this.returnWrapperTarget,
-      singleMode: false,
+      singleMode: true,
       numberOfMonths: 2,
       numberOfColumns: 2,
       minDate: new Date(),
@@ -24,9 +24,6 @@ export default class extends Controller {
         picker.on('selected', (date1, date2) => {
           firstInput.value = date1.format('YYYY-MM-DD')
           secondInput.value = date2.format('YYYY-MM-DD')
-          
-          // Programmatic updates do not trigger native HTML event listeners.
-          // This line forces the form submission immediately after selection.
           firstInput.form.requestSubmit()
         })
       }

@@ -29,6 +29,13 @@
         <%= vehicle.fuel_type %>
       </span>
     </h2>
+    <% if current_renter.nil? %>
+      <% 
+        period = (defined?(collection_date) && defined?(return_date)) ? (collection_date..return_date).count - 1 : vehicle.minimum_days
+        subtotal = vehicle.daily_rate * period
+      %>
+      <p class="text-center"><%= number_to_currency(subtotal, :unit => "XCD $") %> for <%= period %> <%= period > 1 ? 'days' : 'day' %></p>
+    <% end %>
   </div>
   <% if !current_renter.nil? %>
     <div class="card-footer p-0">

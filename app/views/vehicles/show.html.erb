@@ -88,7 +88,7 @@
       </div>
       <div class="row">
         <div class="space-x">
-          <div class="col-7 row my-0 ms-4 pe-2" onclick="window.location.href = '<%= url_for(@vehicle.company) %>';">
+          <div class="col-7 row my-0 ms-4 pe-6" onclick="window.location.href = '<%= url_for(@vehicle.company) %>';">
             <hr class="mt-4 mb-2">
             <div class="avatar avatar-rounded avatar-xl my-2 mx-0<%= !@vehicle.company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
               <% if !@vehicle.company.logo.attached? %>
@@ -180,7 +180,7 @@
         </div>
       </div>
       <% if @vehicle.photos.count > 0 %>
-        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="height: 85vh;">
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="height: 90vh;">
           <div class="offcanvas-header border-0 mb-0 pb-0">
             <h2 class="offcanvas-title" id="offcanvasBottomLabel"><strong><%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></strong></h2>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -189,9 +189,9 @@
             <div class="row">
               <div class="space-x">
                 <div class="col-4">
-                  <h3>Images</h3>
+                  <h3 class="display-6">All Images</h3>
                 </div>
-                <div class="col mt-6">
+                <div class="col mt-2">
                   <div class="space-y">
                     <% @vehicle.photos.each do | photo | %>
                       <div class="card border-0 rounded-3 overflow-hidden">

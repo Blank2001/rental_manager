@@ -10,9 +10,9 @@ class VehiclesController < ApplicationController
   # GET /vehicles/1 or /vehicles/1.json
   def show
     if current_customer.nil?
-      @reservation = Reservation.new(vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.tomorrow : params[:return_date]))
+      @reservation = Reservation.new(vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.today.next_day(@vehicle.minimum_days) : params[:return_date]), res_type: "online")
     elsif request.subdomain != "admin" || request.subdomain != "console"
-      @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.tomorrow : params[:return_date]))
+      @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.today.next_day(@vehicle.minimum_days) : params[:return_date]))
     end
   end
 
@@ -95,7 +95,7 @@ class VehiclesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def vehicle_params
-      params.expect(vehicle: [ :company_id, :category, :brand, :model, :year, :transmission_type, :fuel_type, :seats, :doors, :daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable, :status, :current_step ])
+      params.expect(vehicle: [ :company_id, :category, :brand, :model, :year, :transmission_type, :fuel_type, :seats, :doors, :minimum_days, :daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable, :status, :current_step, :published ])
     end
 
     def photo_params
