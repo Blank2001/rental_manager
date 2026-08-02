@@ -17,17 +17,15 @@ class StaticPagesController < ApplicationController
         @vehicles = @vehicles.available(params[:search][:collection_date].to_date, params[:search][:return_date].to_date)
         @collection_date = params[:search][:collection_date].to_date
         @return_date = params[:search][:return_date].to_date
-      elsif params[:search][:collection_date].present?
-        @vehicles = @vehicles.available(params[:search][:collection_date].to_date, params[:search][:collection_date].to_date.tomorrow)
-        @collection_date = params[:search][:collection_date].to_date
-        @return_date = params[:search][:collection_date].to_date.tomorrow
-      elsif params[:search][:return_date].present?
-        @vehicles = @vehicles.available(params[:search][:return_date].to_date.yesterday, params[:search][:return_date].to_date)
-        @collection_date = params[:search][:return_date].to_date.yesterday
-        @return_date = params[:search][:return_date].to_date
-      end          
+      else
+        @vehicles = @vehicles.available_today
+      end
+      @vehicles = @vehicles.where(transmission_type: params[:search][:transmission_type]) if params[:search][:transmission_type].present?
+      @vehicles = @vehicles.where(fuel_type: params[:search][:fuel_type]) if params[:search][:fuel_type].present?
+      @vehicles = @vehicles.where('seats >= ?', params[:search][:seats]) if params[:search][:seats].present?
+      @vehicles = @vehicles.where('doors >= ?', params[:search][:doors]) if params[:search][:doors].present? 
     else
-      @vehicles = Vehicle.available(Date.today, Date.tomorrow)
+      @vehicles = Vehicle.available_today
     end
   end
   

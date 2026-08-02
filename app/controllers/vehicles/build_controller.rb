@@ -50,6 +50,6 @@ class Vehicles::BuildController < ApplicationController
 		end
 
 		def vehicle_pricing_params
-			params.require(:vehicle).permit(:daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable)
+			params.require(:vehicle).permit(:minimum_days, :daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable)
 		end
 end

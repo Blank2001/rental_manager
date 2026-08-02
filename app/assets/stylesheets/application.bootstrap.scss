@@ -22,3 +22,12 @@
   margin-bottom: 0 !important;
   height: auto !important;
 }
+.btn-action:hover, 
+.btn-action:focus, 
+.btn-action:active {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    transform: none !important;
+}

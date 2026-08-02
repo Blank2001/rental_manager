@@ -3,6 +3,7 @@ class Vehicle < ApplicationRecord
   friendly_id :name_slug, use: :slugged
   belongs_to :company
   has_many :photos, -> { order(:position) }, dependent: :destroy
+  has_many :reservations
   attr_accessor :current_step
 
   STEPS = %w[basics specifications pricing ].freeze
@@ -12,7 +13,7 @@ class Vehicle < ApplicationRecord
 
   validates :category, :brand, :model, :year, presence: true, if: -> { required_for_step?(:basics) }
   validates :transmission_type, :fuel_type, :seats, :doors, presence: true, if: -> { required_for_step?(:specifications) }
-  validates :daily_rate,presence: true, numericality: true, if: -> { required_for_step?(:pricing) }
+  validates :minimum_days, :daily_rate, presence: true, numericality: true, if: -> { required_for_step?(:pricing) }
   validates :security_deposit, presence: true, numericality: true, if: -> { required_for_step?(:pricing) && security_deposit_applicable? }
 
   def name_slug
@@ -25,10 +26,16 @@ class Vehicle < ApplicationRecord
   end
 
   def self.available(collection_date, return_date)
-    unavailable_ids = []
-    Reservation.where(collection_date: collection_date..return_date, return_date: collection_date..return_date).each do | reservation |
-      unavailable_ids.push(reservation.vehicle_id)
-    end
-    return self.where.not(id: unavailable_ids)
+    self.where(id: all.select { |vehicle|
+      vehicle.reservations.where('collection_date < ? AND return_date > ?', collection_date, return_date ).none?
+    }.map(&:id))
+  end
+
+  def self.available_today
+    today = Date.current
+    self.where(id: all.select { |vehicle|
+      target_return_date = today + vehicle.minimum_days.days
+      vehicle.reservations.where('collection_date < ? AND return_date > ?', target_return_date, today ).none?
+    }.map(&:id))
   end
 end

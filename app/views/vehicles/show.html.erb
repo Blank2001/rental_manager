@@ -61,57 +61,31 @@
               <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 3 ? @vehicle.photos.fourth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
             </div>
             <div class="col-6">
-              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 4 ? @vehicle.photos.fifth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+              <div class="card border-0 rounded-3 d-flex flex-column" style="min-height: 22vh; background-image: url(<%= @vehicle.photos.count > 4 ? @vehicle.photos.fifth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;">
+                <% if @vehicle.photos.count > 0 %>
+                  <div class="mt-auto text-end p-3">
+                    <a class="btn" data-bs-toggle="offcanvas" href="#offcanvasBottom" role="button" aria-controls="offcanvasBottom">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-grid-dots">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                      </svg>
+                      View All Images
+                    </a>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <h2 class="ms-4">
-        <span class="badge bg-blue-lt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-            <path d="M5 8l0 8" />
-            <path d="M12 8l0 8" />
-            <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
-          </svg>
-          <%= @vehicle.transmission_type %>
-        </span>
-        <span class="badge bg-blue-lt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
-            <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
-            <path d="M3 20l12 0" />
-            <path d="M18 7v1a1 1 0 0 0 1 1h1" />
-            <path d="M4 11l10 0" />
-          </svg>
-          <%= @vehicle.fuel_type %>
-        </span>
-        <span class="badge bg-blue-lt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M13 14h2" />
-            <path d="M19 10h-16" />
-            <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
-          </svg>
-          <%= @vehicle.doors %> Door
-        </span>
-        <span class="badge bg-blue-lt">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-          </svg>
-          <%= @vehicle.seats %> Seats
-        </span>
-      </h2>
       <div class="row">
         <div class="space-x">
           <div class="col-7 row my-0 ms-4 pe-2" onclick="window.location.href = '<%= url_for(@vehicle.company) %>';">
@@ -137,12 +111,100 @@
               <h1 class="text-primary fw-bold"><%= @vehicle.company.name %></h1>
             </div>
             <hr class="mt-2 mb-4">
+            <div class="space-y">
+              <div class="row">
+                <div class="space-x">
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M5 8l0 8" />
+                        <path d="M12 8l0 8" />
+                        <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @vehicle.transmission_type %></h1>
+                  </div>
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
+                        <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
+                        <path d="M3 20l12 0" />
+                        <path d="M18 7v1a1 1 0 0 0 1 1h1" />
+                        <path d="M4 11l10 0" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @vehicle.fuel_type %></h1>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="space-x">
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M13 14h2" />
+                        <path d="M19 10h-16" />
+                        <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @vehicle.doors %> Door</h1>
+                  </div>
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @vehicle.seats %> Seats</h1>
+                  </div>
+                </div>
+              </div>
+            </div>            
           </div>
           <div class="col-5 mt-4">
             <%= render template: 'reservations/build/dates', locals: { url: reservations_path } %>
           </div>
         </div>
       </div>
+      <% if @vehicle.photos.count > 0 %>
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="height: 85vh;">
+          <div class="offcanvas-header border-0 mb-0 pb-0">
+            <h2 class="offcanvas-title" id="offcanvasBottomLabel"><strong><%= @vehicle.year %> <%= @vehicle.brand %> <%= @vehicle.model %></strong></h2>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body mt-0">
+            <div class="row">
+              <div class="space-x">
+                <div class="col-4">
+                  <h3>Images</h3>
+                </div>
+                <div class="col mt-6">
+                  <div class="space-y">
+                    <% @vehicle.photos.each do | photo | %>
+                      <div class="card border-0 rounded-3 overflow-hidden">
+                        <img src="<%= photo.image_url %>" class="img-fluid w-100" alt="Vehicle photo">
+                      </div>
+                    <% end %>
+                  </div>  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
   <%= render 'layouts/footer' %>

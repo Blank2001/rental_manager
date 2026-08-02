@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_170844) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_02_153734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -148,8 +148,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_170844) do
     t.integer "daily_rate"
     t.integer "doors"
     t.string "fuel_type"
+    t.integer "minimum_days", default: 1
     t.string "model"
     t.float "monthly_rate"
+    t.boolean "published", default: false
     t.integer "seats"
     t.float "security_deposit"
     t.boolean "security_deposit_applicable"

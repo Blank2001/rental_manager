@@ -22,19 +22,49 @@
               <%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "return_date_input", onchange: "this.form.requestSubmit()", value: params.dig(:search, :return_date), readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %> 
             </div> 
           </div>
-        <% end %> 
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel">
+          <div class="offcanvas-header border-0 mb-0 pb-0">
+            <h2 class="offcanvas-title mt-2" id="offcanvasStartLabel">Filter</h2>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div class="form-label"><strong>Transmission Type:</strong></div>
+              <%= f.input :transmission_type, collection: Vehicle::TRANSMISSION_TYPES, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>
+              <div class="form-label"><strong>Engine Fuel Type:</strong></div>
+              <%= f.input :fuel_type, collection: Vehicle::FUEL_TYPE, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>
+              <div class="form-label"><strong>Minimum number of Seats:</strong></div>
+              <%= f.input :seats, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>
+              <div class="form-label"><strong>Minimum number of Doors:</strong></div>
+              <%= f.input :doors, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>
+            </div>
+          </div>
+        <% end %>
+        <a class="btn btn-action btn-xl btn-light justify-content-center ms-6 text-black" data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M4 6l8 0" />
+            <path d="M16 6l4 0" />
+            <path d="M6 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M4 12l2 0" />
+            <path d="M10 12l10 0" />
+            <path d="M15 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M4 18l11 0" />
+            <path d="M19 18l1 0" />
+          </svg>
+        </a>
       </div> 
 
       <%= turbo_frame_tag "search_results" do %> 
         <div class="row row-cards mt-2"> 
           <div class="space-x"> 
             <% @vehicles.each do |vehicle| %> 
-              <%= render "vehicles/vehicle", vehicle: vehicle, collection_date: defined?(@collection_date) ? @collection_date : Date.today, return_date: defined?(@return_date) ? @return_date : Date.tomorrow %> 
+              <%= render "vehicles/vehicle", vehicle: vehicle, collection_date: defined?(@collection_date) ? @collection_date : Date.today, return_date: defined?(@return_date) ? @return_date : Date.today.next_day(vehicle.minimum_days) %> 
             <% end %> 
           </div> 
         </div> 
-      <% end %> 
-
+      <% end %>
+      </div>
     </div> 
   </div> 
   <%= render 'layouts/footer' %> 
