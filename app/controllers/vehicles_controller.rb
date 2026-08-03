@@ -10,9 +10,15 @@ class VehiclesController < ApplicationController
   # GET /vehicles/1 or /vehicles/1.json
   def show
     if current_customer.nil?
-      @reservation = Reservation.new(vehicle_id: @vehicle.id, collection_date: (params[:search][:collection_date].nil? ? Date.today : params[:search][:collection_date]), return_date: (params[:search][:return_date].nil? ? Date.today.next_day(@vehicle.minimum_days) : params[:search][:return_date]), res_type: "online")
+      @reservation = Reservation.new(vehicle_id: @vehicle.id, collection_date: ((params[:search].nil? || params[:search][:collection_date].nil?) ? Date.today : params[:search][:collection_date]), return_date: ((params[:search].nil? || params[:search][:return_date].nil?) ? Date.today.next_day(@vehicle.minimum_days) : params[:search][:return_date]), res_type: "online")
     elsif request.subdomain != "admin" || request.subdomain != "console"
-      @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: @vehicle.id, collection_date: (params[:collection_date].nil? ? Date.today : params[:collection_date]), return_date: (params[:return_date].nil? ? Date.today.next_day(@vehicle.minimum_days) : params[:return_date]))
+      if params[:reservation_id].present?
+        @reservation = Reservation.friendly.find(params[:reservation_id])
+      elsif params[:reservation].present?
+        @reservation = Reservation.new(reservation_params)
+      else
+        @reservation = Reservation.new(customer_id: current_customer.id, vehicle_id: @vehicle.id, collection_date: (params[:search][:collection_date].nil? ? Date.today : params[:search][:collection_date]), return_date: (params[:search][:return_date].nil? ? Date.today.next_day(@vehicle.minimum_days) : params[:search][:return_date]))
+      end
     end
   end
 
@@ -100,5 +106,9 @@ class VehiclesController < ApplicationController
 
     def photo_params
       params.expect(photo: [ :position, :vehicle_id, :image ])
+    end
+    
+    def reservation_params
+      params.expect(reservation: [ :customer_id, :vehicle_id, :collection_date, :return_date, :collection_location, :return_location, :status, :cost, :res_type ])
     end
 end

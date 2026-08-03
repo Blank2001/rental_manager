@@ -3,7 +3,7 @@
   <div class="page-body mt-0"> 
     <%= render 'layouts/messages' %> 
     <div class="container-xl"> 
-      <div class="d-flex justify-content-center mb-5"> 
+      <div class="d-flex justify-content-center mb-5">
         <%= simple_form_for :search, url: "", method: :get, html: { class: "d-flex align-items-center bg-white border border-light rounded-pill shadow-sm hover-shadow transition-all w-100 divide-x overflow-hidden", style: "max-width: 850px;", data: { controller: "search-bar", "turbo-frame": "search_results", "turbo-action": "advance" }, id: "search_update" } do |f| %> 
           
           <div class="d-flex flex-column flex-grow-1 px-4 py-2 text-start cursor-pointer rounded-pill-start hover-bg-light my-2 ms-2"> 

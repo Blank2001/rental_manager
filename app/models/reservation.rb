@@ -11,6 +11,7 @@ class Reservation < ApplicationRecord
   RESERVATION_TYPES = ["maintenance", "offline", "online"]
 
   validates :collection_date, :return_date, presence: true, numericality: true, if: -> { required_for_step?(:dates) }
+  validate :valid_dates?
   validate :valid_rental_period?
   validate :vehicle_available?
 
@@ -26,6 +27,18 @@ class Reservation < ApplicationRecord
     return (self.vehicle.daily_rate * self.period)
   end
 
+  def valid_dates? 
+    if self.collection_date < Date.today && self.res_type == "online"
+      errors.add(:base, "You cannot book a rental in the past")
+      return false
+    elsif self.return_date < self.collection_date
+      errors.add(:base, "Collection date must be before return date")
+      return false
+    else
+      return true
+    end
+  end
+
   def valid_rental_period? 
     if self.period < self.vehicle.minimum_days && self.res_type == "online"
       errors.add(:base, "You are required to book this vehicle for atleast #{self.vehicle.minimum_days} days")
@@ -35,8 +48,13 @@ class Reservation < ApplicationRecord
     end
   end
 
-  def vehicle_available
-    return self.reservations.where(vehicle_id: self.vehicle_id, collection_date: collection_date..return_date, return_date: collection_date..return_date).none?
+  def vehicle_available?
+    if self.vehicle.reservations.where(vehicle_id: self.vehicle_id, collection_date: collection_date..return_date, return_date: collection_date..return_date).none?
+      return true
+    else
+      errors.add(:base, "The vehicle is currently not available")
+      return false
+    end
   end
 
   def required_for_step?(step)

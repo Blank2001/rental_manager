@@ -18,7 +18,7 @@
 			<hr class="mt-0 mb-2">
 			<h1 class="text-center ms-2"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
 			<hr class="my-2">
-			<%= simple_form_for(@reservation, url: reservations_path, html: { method: :post, class: "w-100" }, data: { turbo: false } ) do |f| %>
+			<%= simple_form_for(@reservation, html: { method: :post, data: { turbo: false }, class: "w-100" }) do |f| %>
 				<%= f.input :collection_date, input_html: { value: @reservation.collection_date }, as: :hidden %>
 				<%= f.input :return_date, input_html: { value: @reservation.return_date }, as: :hidden %>
 				<%= f.input :customer_id, input_html: { value: current_customer.id }, as: :hidden if !current_customer.nil? %>
