@@ -1,30 +1,38 @@
 <div class="d-flex flex-column px-6">
-	<h1 class="text-start ms-2"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
-	<div class="card"> 
-        <%= simple_form_for(@reservation, :url => local_assigns[:url], html: { method: :post, data: { controller: "search-bar" } }, data: { turbo: false } ) do |f| %>
-	        <div class="d-flex align-items-center bg-white w-100 overflow-hidden">
-				<div id="collection_container" class="d-flex flex-column flex-grow-1 px-4 py-2 text-start cursor-pointer my-2 ms-2 border-end" data-search-bar-target="collectionWrapper" data-action="click->search-bar#openCalendar">
-					<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Collection Date</label>
-					<%= f.input :collection_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "collection_date_input", readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
-				</div>
-				<div id="return_container" class="d-flex align-items-center justify-content-between flex-grow-1 ps-4 pe-2 py-2 cursor-pointer my-2" data-search-bar-target="returnWrapper" data-action="click->search-bar#openCalendar">
-					<div class="d-flex flex-column flex-grow-1 text-start me-2">
-						<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Return Date</label>
-						<%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "return_date_input", readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
-					</div>
-				</div>
-			</div>
-		    <%= f.input :customer_id, input_html: { value: current_customer.id }, as: :hidden if !current_customer.nil? %>
-		    <%= f.input :vehicle_id, input_html: { value: @reservation.vehicle.id }, as: :hidden %>
-		   	<% if request.subdomain == "admin" %>
-			    <%= f.input :res_type, collection: Reservation::RESERVATION_TYPES %>		   	
-		   	<% else %>
-			    <%= f.input :res_type, input_html: { value: "online" }, as: :hidden %>
-		    <% end %>
-			<hr class="mt-0">
-			<div class="text-center">
-				<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 py-2 mb-4", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." }  %>
-			</div>
+	<div class="card booking-card-wrapper"> 
+    	<%= simple_form_for(:search, url: "", method: :get, html: { data: { controller: "booking-form", "turbo-frame": "search_results", "turbo-action": "advance" }, id: "search_update", class: "w-100" }, data: { turbo: false } ) do |f| %>
+	      	<div class="d-flex align-items-center bg-white w-100 overflow-hidden booking-divide-x position-relative">
+	        	<div id="booking_collection_container" class="d-flex flex-column flex-grow-1 px-4 py-2 text-start cursor-pointer my-2 ms-2" data-booking-form-target="bookingCollectionWrapper" data-action="click->booking-form#openCalendar">
+		          	<label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Collection Date</label>
+		        	<%= f.input :collection_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "booking_collection_date_input", value: @reservation.collection_date, readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
+	        	</div>
+		        <div id="booking_return_container" class="d-flex align-items-center justify-content-between flex-grow-1 ps-4 pe-2 py-2 cursor-pointer my-2" data-booking-form-target="bookingReturnWrapper" data-action="click->booking-form#openCalendar">
+		          <div class="d-flex flex-column flex-grow-1 text-start me-2">
+		            <label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Return Date</label>
+		            <%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "booking_return_date_input", value: @reservation.return_date, readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
+		          </div>
+		        </div>
+		    </div>
 		<% end %>
-	</div>
+		<%= turbo_frame_tag "search_results" do %>
+			<hr class="mt-0 mb-2">
+			<h1 class="text-center ms-2"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
+			<hr class="my-2">
+			<%= simple_form_for(@reservation, url: reservations_path, html: { method: :post, class: "w-100" }, data: { turbo: false } ) do |f| %>
+				<%= f.input :collection_date, input_html: { value: @reservation.collection_date }, as: :hidden %>
+				<%= f.input :return_date, input_html: { value: @reservation.return_date }, as: :hidden %>
+				<%= f.input :customer_id, input_html: { value: current_customer.id }, as: :hidden if !current_customer.nil? %>
+				<%= f.input :vehicle_id, input_html: { value: @reservation.vehicle.id }, as: :hidden %>
+
+				<% if request.subdomain == "admin" %>
+				<%= f.input :res_type, collection: Reservation::RESERVATION_TYPES %>       
+				<% else %>
+				<%= f.input :res_type, input_html: { value: "online" }, as: :hidden %>
+				<% end %>
+				<div class="text-center">
+					<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 pb-2 mb-4", data: { disable_with: "<div class='spinner-border spinner-border-sm' role='status'></div> Loading..." } %>
+				</div>
+			<% end %>
+		<% end %>
+  </div>
 </div>

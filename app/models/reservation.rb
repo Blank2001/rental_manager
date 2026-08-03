@@ -19,7 +19,7 @@ class Reservation < ApplicationRecord
   end
 
   def period
-    return ((self.collection_date..self.return_date).count - 1)
+    return ((self.collection_date..self.return_date).count > 1 ? ((self.collection_date..self.return_date).count - 1) : 1)
   end
 
   def subtotal

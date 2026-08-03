@@ -31,3 +31,31 @@
     box-shadow: none !important;
     transform: none !important;
 }
+
+.booking-card-wrapper {
+  overflow: hidden;
+}
+
+.booking-divide-x {
+  position: relative;
+}
+
+.booking-divide-x > * + * {
+  border-left: none !important;
+}
+
+.booking-divide-x > * + *::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  height: 50%;
+  border-left: 1px solid rgba(0, 0, 0, 0.12) !important;
+  transform: translateX(-50%);
+}
+
+.booking-divide-x .mb-0, 
+.booking-divide-x .form-group {
+  margin-bottom: 0 !important;
+  height: auto !important;
+}

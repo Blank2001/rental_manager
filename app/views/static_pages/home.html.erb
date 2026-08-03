@@ -22,13 +22,13 @@
               <%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "return_date_input", onchange: "this.form.requestSubmit()", value: params.dig(:search, :return_date), readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %> 
             </div> 
           </div>
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel">
-          <div class="offcanvas-header border-0 mb-0 pb-0">
-            <h2 class="offcanvas-title mt-2" id="offcanvasStartLabel">Filter</h2>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-          <div class="offcanvas-body">
-            <div class="form-label"><strong>Transmission Type:</strong></div>
+          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel">
+            <div class="offcanvas-header border-0 mb-0 pb-0">
+              <h2 class="offcanvas-title mt-2" id="offcanvasStartLabel">Filter</h2>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <div class="form-label"><strong>Transmission Type:</strong></div>
               <%= f.input :transmission_type, collection: Vehicle::TRANSMISSION_TYPES, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>
               <div class="form-label"><strong>Engine Fuel Type:</strong></div>
               <%= f.input :fuel_type, collection: Vehicle::FUEL_TYPE, required: true, autofocus: true, label: false, input_html: { onchange: "this.form.requestSubmit()" } %>

@@ -9,3 +9,6 @@ application.register("sortable", SortableController)
 
 import SearchBarController from "./search_bar_controller"
 application.register("search-bar", SearchBarController)
+
+import BookingFormController from "./booking_form_controller"
+application.register("booking-form", BookingFormController)

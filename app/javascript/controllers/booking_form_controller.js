@@ -2,19 +2,19 @@ import { Controller } from "@hotwired/stimulus"
 import Litepicker from "litepicker"
 
 export default class extends Controller {
-  static targets = [ "collectionWrapper", "returnWrapper" ]
-
+  static targets = [ "bookingCollectionWrapper", "bookingReturnWrapper" ]
   connect() {
-    const firstInput = document.getElementById('collection_date_input')
-    const secondInput = document.getElementById('return_date_input')
+    const firstInput = document.getElementById('booking_collection_date_input')
+    const secondInput = document.getElementById('booking_return_date_input')
+
     if (!firstInput || !secondInput) return
 
     const todayMidnight = new Date()
     todayMidnight.setHours(0, 0, 0, 0)
-    
+
     this.picker = new Litepicker({
-      element: this.collectionWrapperTarget,
-      elementEnd: this.returnWrapperTarget,
+      element: this.bookingCollectionWrapperTarget,
+      elementEnd: this.bookingReturnWrapperTarget,
       singleMode: false,
       numberOfMonths: 2,
       numberOfColumns: 2,
