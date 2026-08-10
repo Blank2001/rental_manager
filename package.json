@@ -12,6 +12,7 @@
     "watch:css": "nodemon --watch ./app/assets/stylesheets/ --ext scss --exec \"yarn build:css\""
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^2.1.1",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
     "@popperjs/core": "^2.11.8",
@@ -28,5 +29,9 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "@parcel/watcher@2.6.0": true
+  }
 }

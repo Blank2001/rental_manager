@@ -1,0 +1,30 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+    <div class="page-body mt-0">
+        <%= render 'layouts/messages' %> 
+        <div class="container-xl">
+            <h1 class="text-center my-2 text-primary"><%= @location.company.name %>'s Location</h1>
+            <div class="card">
+                <%= simple_form_for(@location, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+                    <div class="card-body">
+                        <%= render "layouts/errors", obj: @location %>
+                        <div data-controller="map" data-map-keys-value="<%= Rails.application.credentials.maps[:keys] %>" class="location-map-modal">
+                            <div id="map" style="height: 80vh;width: 100%;"></div>
+                            <%= f.input :latitude, label: false, input_html: {id: "latitude"}, as: :hidden %>
+                            <%= f.input :longitude, label: false, input_html: { id: "longitude"}, as: :hidden %>
+                            <%= f.input :city, label: false, input_html: { id: "city"}, as: :hidden %>
+                            <%= f.input :country, label: false, input_html: { id: "country"}, as: :hidden %>
+                            <%= f.input :location_number, label: false, input_html: { value: nil}, as: :hidden %>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent mt-auto row mx-0">
+                        <div class="btn-list justify-content-end">
+                            <%= f.button :button, "Next Step", class: "btn btn-primary", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <%= render 'layouts/footer' %>
+</div>

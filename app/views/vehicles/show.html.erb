@@ -10,7 +10,7 @@
       <div class="row">
         <% if request.referrer.present? && URI(request.referer).path != request.path %>
           <span class="col-1">
-            <%= link_to :back, class: "btn btn-md btn-pill" do %>
+            <%= link_to :back, class: "btn btn-md btn-pill btn-animate-icon btn-animate-icon-shake" do %>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M15 6l-6 6l6 6" />

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_02_205215) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_10_194743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,6 +97,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_205215) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.boolean "allows_collection", default: true
+    t.boolean "allows_return", default: true
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "hidden", default: false
+    t.boolean "is_default"
+    t.string "latitude"
+    t.string "longitude"
+    t.string "name"
+    t.string "slug"
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_locations_on_company_id"
+    t.index ["slug"], name: "index_locations_on_slug", unique: true
+  end
+
   create_table "photos", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "position"
@@ -127,13 +143,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_205215) do
 
   create_table "reservations", force: :cascade do |t|
     t.date "collection_date"
-    t.string "collection_location"
+    t.integer "collection_location"
     t.json "cost", default: {}
     t.datetime "created_at", null: false
     t.bigint "customer_id"
     t.string "res_type", default: "online"
     t.date "return_date"
-    t.string "return_location"
+    t.integer "return_location"
     t.string "slug"
     t.string "status"
     t.datetime "updated_at", null: false
@@ -171,6 +187,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_205215) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "companies", "renters"
+  add_foreign_key "locations", "companies"
   add_foreign_key "photos", "vehicles"
   add_foreign_key "reservations", "customers"
   add_foreign_key "reservations", "vehicles"

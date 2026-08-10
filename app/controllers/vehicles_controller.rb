@@ -39,7 +39,7 @@ class VehiclesController < ApplicationController
   def create
     @vehicle = Vehicle.new(company_id: params[:company_id].to_i)
      if @vehicle.save(validate: false)
-        redirect_to vehicle_build_url(vehicle_id: @vehicle.id, id: :basics)
+        redirect_to vehicle_build_url(vehicle_id: @vehicle.slug, id: :basics)
       else
         redirect_to admin_root, alert: "Failed to initialize vehicle creation."
       end

@@ -1,6 +1,5 @@
 <div class="list-group-item" onClick="window.location.href = '<%= url_for(company) %>';">
   <div class="row align-items-center">
-    <div class="col-auto"><span class="badge bg-primary"></span></div>
     <div class="col-auto">
       <a>
         <span class="avatar avatar-lg p-1"><%= image_tag(company.logo) if company.logo.attached? %></span>

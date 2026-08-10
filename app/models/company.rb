@@ -3,6 +3,7 @@ class Company < ApplicationRecord
   friendly_id :name, use: :slugged
   belongs_to :renter
   has_many :vehicles
+  has_many :locations
 
   has_one_attached :logo
   has_one_attached :hero_image

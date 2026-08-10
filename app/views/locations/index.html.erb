@@ -1,0 +1,56 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body mt-0">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <section class="banner pb-4">
+        <div class="banner-card card align-items-center justify-content-center border-0 p-md-5 p-4 bg-secondary overflow-hidden mt-n3 rounded-4" style="min-height: 30vh; background-image: <%= @company.hero_background_image %>; background-size: cover; background-repeat: no-repeat; background-position: center;"><span class="img-overlay opacity-40"></span>
+          <div class="content-overlay" style="max-width: 856px;"></div>
+        </div>
+      </section>
+      <div class="row">
+        <div class="avatar avatar-rounded avatar-2xl my-2 mx-0<%= !@company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+          <% if !@company.logo.attached? %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M3 21l18 0" />
+              <path d="M5 21v-14l8 -4v18" />
+              <path d="M19 21v-10l-6 -4" />
+              <path d="M9 9l0 .01" />
+              <path d="M9 12l0 .01" />
+              <path d="M9 15l0 .01" />
+              <path d="M9 18l0 .01" />
+            </svg>
+          <% else %>
+            <%= image_tag(@company.logo) %>
+          <% end %>
+        </div>
+        <div class="col mx-4 mt-4 mb-2">
+          <h1 class="display-5 mt-2 text-primary fw-bold"><%= @company.name %></h1>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col">
+          <h1 class="display-6 mt-0 fw-bold">Locations</h1>
+        </div>
+        <div class="text-end col">
+          <%= link_to locations_path(company_id: @company.id), method: :post, "data-turbo-method": :post, class: "btn btn-pill btn-primary text-white" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 5l0 14" />
+              <path d="M5 12l14 0" />
+            </svg>
+            New Location
+          <% end %>
+        </div>
+        <div class="row row-cards space-x">
+          <% @company.locations.each do | location |%>
+            <%= render "locations/location", location: location %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+</div>

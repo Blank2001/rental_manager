@@ -27,7 +27,7 @@ class Vehicle < ApplicationRecord
 
   def self.available(collection_date, return_date)
     self.where(id: all.select { |vehicle|
-      vehicle.reservations.where(collection_date: collection_date..return_date, return_date: collection_date..return_date ).none?
+      vehicle.reservations.where(collection_date: ..return_date, return_date: collection_date.. ).none?
     }.map(&:id))
   end
 
@@ -35,7 +35,7 @@ class Vehicle < ApplicationRecord
     today = Date.current
     self.where(id: all.select { |vehicle|
       target_return_date = today + vehicle.minimum_days.days
-      vehicle.reservations.where(collection_date:today..target_return_date, return_date: today..target_return_date ).none?
+      vehicle.reservations.where(collection_date:..target_return_date, return_date: today..).none?
     }.map(&:id))
   end
 end

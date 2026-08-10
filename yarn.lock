@@ -7,6 +7,13 @@
   resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.1.tgz"
   integrity sha512-u/anNYF2mmVOEDwLtnQ1wOr3EZ9sTNGLWrsYGYwHWzGA3Si84IOkHXlbWTD1NB+9/1lcnweYKO54uhxZydNzfA==
 
+"@googlemaps/js-api-loader@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/@googlemaps/js-api-loader/-/js-api-loader-2.1.1.tgz"
+  integrity sha512-yUpAwksbHrlZIWD49JmveNSfBG4oAK0AwMknfSaPMnP5N7UT8oFRVCqwjGb1XQovi//7KLbPQKZpbofiLGzpDw==
+  dependencies:
+    "@types/google.maps" "^3.53.1"
+
 "@hotwired/stimulus@^3.2.2":
   version "3.2.2"
   resolved "https://registry.npmjs.org/@hotwired/stimulus/-/stimulus-3.2.2.tgz"
@@ -70,6 +77,11 @@
   dependencies:
     "@popperjs/core" "^2.11.8"
     bootstrap "5.3.7"
+
+"@types/google.maps@^3.53.1":
+  version "3.65.5"
+  resolved "https://registry.npmjs.org/@types/google.maps/-/google.maps-3.65.5.tgz"
+  integrity sha512-oR9Hq/WaKGzIguZEwoCuyQ0ofDhCbefmS9RrjLUZ5scMziwTE6xA90drJYt2ZsyUCYmCqnxQcDpfGqeRE/Zgog==
 
 ansi-regex@^5.0.1:
   version "5.0.1"

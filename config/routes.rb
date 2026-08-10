@@ -83,5 +83,8 @@ Rails.application.routes.draw do
       post  'renter_login', to: 'renters/sessions#create', as: :renter_session
       delete 'renter_logout', to: 'renters/sessions#destroy', as: :destroy_renter_session 
     end
+    resources :locations, except: [:new, :edit, :update] do
+      resources :build, only: [:show, :update], controller: 'locations/build'
+    end
   end
 end

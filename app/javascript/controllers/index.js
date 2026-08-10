@@ -12,3 +12,6 @@ application.register("search-bar", SearchBarController)
 
 import BookingFormController from "./booking_form_controller"
 application.register("booking-form", BookingFormController)
+
+import MapRequestController from "./map_controller"
+application.register("map", MapRequestController)
