@@ -1,0 +1,27 @@
+<%= render 'layouts/renter_navbar' %>
+<div class="d-flex flex-column h-100 page-wrapper">
+    <div class="page-body mt-0">
+        <%= render 'layouts/messages' %> 
+        <div class="container-xl">
+            <h1 class="text-center my-2 text-primary"><%= @location.company.name %>'s Location Setup</h1>
+            <div class="card">
+                <%= simple_form_for(@location, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+                    <div class="card-body">
+                        <%= render "layouts/errors", obj: @location %>
+                        <%= f.input :name %>
+                        <%= f.input :is_default %>
+                        <%= f.input :allows_collection %>
+                        <%= f.input :allows_return %>
+                        <%= f.input :hidden %>
+                    </div>
+                    <div class="card-footer bg-transparent mt-auto row mx-0">
+                        <div class="btn-list justify-content-end">
+                          <%= f.button :button, "Finish", class: "btn btn-success", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <%= render 'layouts/footer' %>
+</div>

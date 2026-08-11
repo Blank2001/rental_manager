@@ -13,7 +13,7 @@
         </div>
       </section>
       <div class="row">
-        <div class="avatar avatar-rounded avatar-2xl my-2 mx-0<%= !@company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+        <div class="avatar avatar-rounded avatar-2xl my-2 mx-0<%= !@company.logo.attached? ? ' bg-primary' : '' %> text-white col-md-2">
           <% if !@company.logo.attached? %>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -29,7 +29,7 @@
             <%= image_tag(@company.logo) %>
           <% end %>
         </div>
-        <div class="col mx-4 my-4">
+        <div class="col-md mx-4 my-4">
           <h1 class="<%= current_renter.nil? ? 'display-5 my-4' : 'display-6 mt-0' %> text-primary fw-bold"><%= @company.name %></h1>
           <span>
             <% if !current_renter.nil? %>

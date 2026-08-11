@@ -1,6 +1,6 @@
 class VehiclesController < ApplicationController
   before_action :set_vehicle, only: %i[ show destroy photos add_photo reorder_photos]
-  before_action :require_renter, except: %i[ show photos ]
+  before_action :require_renter, except: %i[ show ]
 
   # GET /vehicles or /vehicles.json
   def index

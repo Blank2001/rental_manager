@@ -7,20 +7,16 @@ export default class extends Controller {
   }
 
   async connect() {
-    // 1. Configure the options globally
     setOptions({
       apiKey: this.keysValue,
       version: "beta",
     });
 
     try {
-      // 2. Import separate functional libraries 
-      // Note: Geocoder lives in 'geocoding' (or legacy 'core'), NOT 'maps'
       const { Map, InfoWindow } = await importLibrary("maps");
       const { Geocoder } = await importLibrary("geocoding");
       const { AdvancedMarkerElement } = await importLibrary("marker");
 
-      // 3. Initialize your map elements
       this.map = new Map(document.getElementById("map"), {
         zoom: 16,
         mapId: '8c893b08dcdd4346',
@@ -35,25 +31,26 @@ export default class extends Controller {
         title: "Current Location",
       });
 
-      // 4. Bind event listeners
       this.draggableMarker.addListener("dragend", () => {
+        this.updateCoordinatesUI();
         this.showPlaceDetails();
-        
-        const position = this.draggableMarker.position;
-        const latitudeInput = document.getElementById("latitude");
-        const longitudeInput = document.getElementById("longitude");
-        
-        if (latitudeInput && longitudeInput && position) {
-          latitudeInput.value = typeof position.lat === "function" ? position.lat() : position.lat;
-          latitudeInput.value = typeof position.lng === "function" ? position.lng() : position.lng;
-        }
       });
 
-      // 5. Initialize user geolocation
       this.getCurrentLocation();
 
     } catch (error) {
       console.error("Failed to load Google Maps setup:", error);
+    }
+  }
+
+  updateCoordinatesUI() {
+    const position = this.draggableMarker.position;
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    
+    if (latitudeInput && longitudeInput && position) {
+      latitudeInput.value = typeof position.lat === "function" ? position.lat() : position.lat;
+      longitudeInput.value = typeof position.lng === "function" ? position.lng() : position.lng;
     }
   }
 
@@ -64,15 +61,42 @@ export default class extends Controller {
     try {
       const response = await this.geocoder.geocode({ location: position });
       if (response.results && response.results[0]) {
-        const formattedAddress = response.results[0].formatted_address;
-        
-        // Update your UI or input targets here
-        this.infoWindow.setContent(formattedAddress);
+        const place = response.results[0];
+
+        this.infoWindow.setContent(place.formatted_address);
         this.infoWindow.open(this.map, this.draggableMarker);
+
+        this.populateAddressFields(place.address_components);
       }
     } catch (error) {
       console.error("Geocoding failed:", error);
     }
+  }
+
+  populateAddressFields(components) {
+    const cityInput = document.getElementById("city");
+    const countryInput = document.getElementById("country");
+
+    let city = "";
+    let country = "";
+
+    components.forEach(component => {
+      const types = component.types;
+
+      if (types.includes("locality")) {
+        city = component.long_name;
+      } else if (!city && types.includes("postal_town")) {
+        city = component.long_name;
+      } else if (!city && types.includes("administrative_area_level_2")) {
+        city = component.long_name;
+      }
+
+      if (types.includes("country")) {
+        country = component.long_name;
+      }
+    });
+    if (cityInput) cityInput.value = city;
+    if (countryInput) countryInput.value = country;
   }
 
   getCurrentLocation() {
@@ -84,18 +108,11 @@ export default class extends Controller {
             lng: position.coords.longitude,
           };
 
-          // Center the map and place the interactive marker
           this.map.setCenter(userPos);
           this.draggableMarker.position = userPos;
           
-          // Populate the forms on first load
-          const latitudeInput = document.getElementById("latitude");
-          const longitudeInput = document.getElementById("longitude");
-          if (latitudeInput && longitudeInput) {
-            latitudeInput.value = userPos.lat;
-            longitudeInput.value = userPos.lng;
-          }
-          
+          // Initialise both coordinate fields and address field updates
+          this.updateCoordinatesUI();
           this.showPlaceDetails();
         },
         (error) => {

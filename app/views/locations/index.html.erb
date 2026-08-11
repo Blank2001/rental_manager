@@ -44,11 +44,11 @@
             New Location
           <% end %>
         </div>
-        <div class="row row-cards space-x">
-          <% @company.locations.each do | location |%>
-            <%= render "locations/location", location: location %>
-          <% end %>
-        </div>
+      </div>
+      <div class="row row-cards mt-2">
+        <% @company.locations.each do | location |%>
+          <%= render "locations/location", location: location %>
+        <% end %>
       </div>
     </div>
   </div>

@@ -56,12 +56,10 @@
       </div> 
 
       <%= turbo_frame_tag "search_results" do %> 
-        <div class="row row-cards mt-2"> 
-          <div class="space-x"> 
-            <% @vehicles.each do |vehicle| %> 
-              <%= render "vehicles/vehicle", vehicle: vehicle, collection_date: defined?(@collection_date) ? @collection_date : Date.today, return_date: defined?(@return_date) ? @return_date : Date.today.next_day(vehicle.minimum_days) %> 
-            <% end %> 
-          </div> 
+        <div class="row row-cards space-x mt-2"> 
+          <% @vehicles.each do |vehicle| %> 
+            <%= render "vehicles/vehicle", vehicle: vehicle, collection_date: defined?(@collection_date) ? @collection_date : Date.today, return_date: defined?(@return_date) ? @return_date : Date.today.next_day(vehicle.minimum_days) %> 
+          <% end %> 
         </div> 
       <% end %>
       </div>

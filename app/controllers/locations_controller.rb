@@ -1,5 +1,6 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: %i[ show destroy ]
+  before_action :set_location, only: %i[ destroy ]
+  before_action :require_renter
 
   # GET /locations or /locations.json
   def index
@@ -14,8 +15,8 @@ class LocationsController < ApplicationController
   end
 
   # GET /locations/1 or /locations/1.json
-  def show
-  end
+  # def show
+  # end
 
   # GET /locations/new
   # def new
