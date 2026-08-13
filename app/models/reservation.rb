@@ -7,7 +7,7 @@ class Reservation < ApplicationRecord
   
   attr_accessor :current_step
 
-  STEPS = %w[ dates, location ].freeze
+  STEPS = %w[ dates collection return  ].freeze
   RESERVATION_TYPES = ["maintenance", "offline", "online"]
 
   validates :collection_date, :return_date, presence: true, numericality: true, if: -> { required_for_step?(:dates) }

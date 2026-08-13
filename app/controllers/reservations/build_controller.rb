@@ -1,7 +1,7 @@
 class Reservations::BuildController < ApplicationController
 	include Wicked::Wizard
 
-	steps :dates, :location #, :payment
+	steps :dates, :collection, :return #, :payment
 
 	def show
 		@reservation = Reservation.friendly.find(params[:reservation_id])
@@ -21,8 +21,8 @@ class Reservations::BuildController < ApplicationController
 		case step
 		when :dates
 			@reservation.update(reservation_dates_params)
-		when :location
-			@reservation.update(reservation_location_params)
+		when :collection
+			@reservation.update(reservation_collection_params)
 		# when :payment
 		# 	@reservation.update(reservation_payment_params)
 		end
@@ -44,8 +44,8 @@ class Reservations::BuildController < ApplicationController
 			params.require(:reservation).permit(:collection_date, :return_date, :res_type)
 		end
 
-		def reservation_location_params
-			params.require(:reservation).permit()
+		def reservation_collection_params
+			params.require(:reservation).permit(:collection_location)
 		end
 
 		# def reservation_payment_params

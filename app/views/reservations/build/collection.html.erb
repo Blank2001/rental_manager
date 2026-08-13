@@ -1,0 +1,66 @@
+<%= render 'layouts/navbar' %> 
+<div class="d-flex flex-column h-100 page-wrapper"> 
+  <div class="page-body mt-0"> 
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl"> 
+    	<div class="row">
+    		<div class="col">
+    			<div class="card">
+    				<div class="card-body px-0 pb-0">
+		                <%= simple_form_for(@reservation, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+			                <h2 class="ms-4">Collection Locations</h2>
+	    					<div class="list-group list-group-flush" data-controller="location-selector">
+								<% @reservation.vehicle.company.collection_locations.each do |location| %>
+									<label class="list-group-item list-group-item-action d-flex align-items-center" data-location-selector-target="option" >
+										<iframe
+									        width="50%"
+									        height="300"
+									        style="border:0; padding: 0; margin: 0;"
+									        loading="lazy"
+									        allowfullscreen
+									        referrerpolicy="no-referrer-when-downgrade"
+									        src="https://maps.google.com/maps?q=<%= location.latitude %>,<%= location.longitude %>&z=15&output=embed">
+									    </iframe>
+										<div class="flex-fill">
+											<div class="fw-bold ms-4"><%= location.name %></div>
+										</div>
+										<%= f.radio_button :collection_location, location.id, class: "form-check-input ms-3", data: { action: "change->location-selector#select" } %>
+									</label>
+								<% end %>
+							</div>
+						<% end %>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="col-4">
+    			<div class="card">
+    				<div class="card-body">
+    					<div class="row align-items-end">
+    						<span class="avatar avatar-xl me-2 col-2" style="background-image: url('<%= url_for(@reservation.vehicle.photos.first.image) %>');"></span>
+    						<span class="col"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong><br>From <%= @reservation.vehicle.company.name %></span>
+    					</div>
+    					<hr class="mt-4 mb-2">
+    					<span><strong>Dates</strong></span>
+    					<p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+    					<hr class=" mt-0 mb-2">
+    					<span><strong>Price Details</strong></span>
+    					<table class="w-100">
+    						<tbody>
+    							<tr>
+    								<td><%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %> x <%= number_to_currency(@reservation.vehicle.daily_rate, :unit => "$") %></td>
+    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>
+    							</tr>
+		    					<tr>
+		    						<td><strong>Total</strong></td>
+    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>		    						
+		    					</tr>
+    						</tbody>
+    					</table>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div> 
+  </div> 
+  <%= render 'layouts/footer' %> 
+</div>

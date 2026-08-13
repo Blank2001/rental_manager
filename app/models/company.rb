@@ -19,4 +19,12 @@ class Company < ApplicationRecord
       return "url(#{Rails.application.routes.url_helpers.rails_blob_path(self.hero_image, only_path: true)})"
     end
   end
+
+  def collection_locations
+    return self.locations.where(hidden: false, allows_collection: true)
+  end
+
+  def return_locations
+    return self.locations.where(hidden: false, allows_return: true)
+  end
 end
