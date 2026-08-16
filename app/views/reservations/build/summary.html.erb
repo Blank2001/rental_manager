@@ -23,7 +23,7 @@
 		    					</div>
 		    				</div>
 	    					<div class="row align-items-end">
-	    						<span class="avatar avatar-xl me-4 col-2" style="background-image: url('<%= url_for(@reservation.vehicle.photos.first.image) %>');"></span>
+	    						<span class="avatar avatar-xl me-4 col-2" style="background-image: url('<%= url_for(@reservation.vehicle.photos.first.image) if !@reservation.vehicle.photos.first.nil? %>');"></span>
 	    						<span class="col"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong><br>From <%= @reservation.vehicle.company.name %></span>
 	    					</div>
 	    					<hr class="mt-4 mb-3">
@@ -64,9 +64,26 @@
 	    								<td><%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %> x <%= number_to_currency(@reservation.vehicle.daily_rate, :unit => "$") %></td>
 	    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>
 	    							</tr>
+	    							<% if (@reservation.collection_location.nil? && Location.find(@reservation.collection_location).additional_cost > 0) || ( @reservation.return_location &&Location.find(@reservation.return_location).additional_cost > 0) %>
+                      <tr>
+                        <td colspan="2"><strong>Additional Costs</strong></td>
+                      </tr>
+                    <% end %>
+                    <% if Location.find(@reservation.collection_location).additional_cost > 0 %>
+                      <tr>
+                        <td>Collection Location - (<%= Location.find(@reservation.collection_location).name %>)</td>
+                        <td class="text-end"><%= number_to_currency(Location.find(@reservation.collection_location).additional_cost, :unit => "+ XCD $") %></td>
+                      </tr>
+                    <% end %>
+                    <% if Location.find(@reservation.return_location).additional_cost > 0 %>
+                      <tr>
+                        <td>Return Location - (<%= Location.find(@reservation.return_location).name %>)</td>
+                        <td class="text-end"><%= number_to_currency(Location.find(@reservation.return_location).additional_cost, :unit => "+ XCD $") %></td>
+                      </tr>
+                    <% end %>
 			    					<tr>
 			    						<td><strong>Total</strong></td>
-	    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>		    						
+	    								<td class="text-end"><%= number_to_currency(@reservation.total, :unit => "XCD $") %></td>		    						
 			    					</tr>
 	    						</tbody>
 	    					</table>

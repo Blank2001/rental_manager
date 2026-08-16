@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: %i[ destroy ]
   before_action :require_renter
+  before_action :validate_renter, only: %i[ destroy ]
 
   # GET /locations or /locations.json
   def index
@@ -68,6 +69,15 @@ class LocationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def location_params
-      params.expect(location: [ :name, :latitude, :longitude, :is_default, :allows_collection, :allows_return, :hidden ])
+      params.expect(location: [ :name, :additional_cost, :latitude, :longitude, :is_default, :allows_collection, :allows_return, :hidden ])
+    end
+
+    def validate_renter
+      if @location.company.renter_id != current_renter.id
+        respond_to do |format|
+          format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+          format.json { head :no_content }
+        end
+      end
     end
 end

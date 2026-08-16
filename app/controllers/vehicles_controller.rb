@@ -1,6 +1,7 @@
 class VehiclesController < ApplicationController
   before_action :set_vehicle, only: %i[ show destroy photos add_photo reorder_photos]
   before_action :require_renter, except: %i[ show ]
+  before_action :validate_renter, only: %i[ destroy photos add_photo reorder_photos]
 
   # GET /vehicles or /vehicles.json
   def index
@@ -113,5 +114,14 @@ class VehiclesController < ApplicationController
     
     def reservation_params
       params.expect(reservation: [ :customer_id, :vehicle_id, :collection_date, :return_date, :collection_location, :return_location, :status, :cost, :res_type ])
+    end
+
+    def validate_renter
+      if @vehicle.company.renter_id != current_renter.id
+        respond_to do |format|
+          format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+          format.json { head :no_content }
+        end
+      end
     end
 end

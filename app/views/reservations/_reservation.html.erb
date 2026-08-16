@@ -22,13 +22,13 @@
     <div class="list-group list-group-flush">
       <div class="list-group-item list-group-item-action d-flex align-items-center">
         <div class="row align-items-center">
-          <span class="avatar avatar-2xl ms-2 me-4 col-2" style="background-image: url('<%= url_for(reservation.vehicle.photos.first.image) %>');"></span>
+          <span class="avatar avatar-2xl ms-2 me-4 col-2" style="background-image: url('<%= url_for(reservation.vehicle.photos.first.image if !@reservation.vehicle.photos.first.nil?) %>');"></span>
           <div class="col">
             <h1><%= reservation.vehicle.year %> <%= reservation.vehicle.brand %> <%= reservation.vehicle.model %></h1>
             <div><span><strong>Dates:</strong> <%= format_date_range(reservation.collection_date, reservation.return_date) %></span></div>
             <div><span><strong>Collection Location:</strong> <%= Location.find(reservation.collection_location).name if !reservation.collection_location.nil? %></span></div>
             <div><span><strong>Return Location:</strong> <%= Location.find(reservation.return_location).name if !reservation.return_location.nil? %></span></div>
-            <div><span class="text-success"><strong class="text-black">Cost:</strong> <%= number_to_currency(reservation.subtotal, :unit => "XCD $") %></span></div>
+            <div><span class="text-success"><strong class="text-black">Cost:</strong> <%= number_to_currency(reservation.total, :unit => "XCD $") %></span></div>
           </div>
         </div>
       </div>

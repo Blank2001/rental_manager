@@ -10,7 +10,7 @@
 		          <div class="d-flex flex-column flex-grow-1 text-start me-2">
 		            <label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Return Date</label>
 		            <%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "booking_return_date_input", value: @reservation.return_date, readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
-		            <%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : (params[:search][:slug].present? ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id] || !@reservation.slug.nil? || params[:search][:slug].present?) %> 
+		            <%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : ((params[:search].present? && params[:search][:slug].present?) ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id].present? || !@reservation.slug.nil? || (params[:search].present? && params[:search][:slug].present?)) %> 
 		          </div>
 		        </div>
 		    </div>
@@ -26,11 +26,14 @@
 				<%= f.input :vehicle_id, input_html: { value: @reservation.vehicle.id }, as: :hidden %>
 
 				<% if request.subdomain == "admin" %>
-				<%= f.input :res_type, collection: Reservation::RESERVATION_TYPES %>       
+				<div class="px-4">
+					<label class="form-label">Reservation Type</label>
+					<%= f.input :res_type, collection: Reservation::ADMIN_RESERVATION_TYPES, label: false %>
+				</div>    
 				<% else %>
 				<%= f.input :res_type, input_html: { value: "online" }, as: :hidden %>
 				<% end %>
-				<%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : (params[:search][:slug].present? ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id] || !@reservation.slug.nil? || params[:search][:slug].present?) %> 
+				<%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : ((params[:search].present? && params[:search][:slug].present?) ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id].present? || !@reservation.slug.nil? || (params[:search].present? && params[:search][:slug].present?)) %> 
 				<div class="text-center">
 					<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 pb-2 mb-4", data: { disable_with: "<div class='spinner-border spinner-border-sm' role='status'></div> Loading..." } %>
 				</div>

@@ -6,6 +6,9 @@ class Reservations::BuildController < ApplicationController
 	def show
 		@reservation = Reservation.friendly.find(params[:reservation_id])
 		@reservation.current_step = step.to_s
+		if @reservation.res_type == 'maintenance'
+			return redirect_to finish_wizard_path
+		end
 		render_wizard
 	end
 
@@ -22,13 +25,31 @@ class Reservations::BuildController < ApplicationController
 		when :dates
 			@reservation.update(reservation_dates_params)
 		when :collection
-			@reservation.update(reservation_collection_params)
+			if @reservation.res_type == 'maintenance'
+				skip_step
+			else
+				@reservation.update(reservation_collection_params)
+		    end
 		when :return
-			@reservation.update(reservation_return_params)
+			if @reservation.res_type == 'maintenance'
+				skip_step
+			elsif @reservation.res_type == 'offline'
+				@reservation.update(reservation_return_params)
+				@reservation.update({status: 'reserved'})
+				return redirect_to finish_wizard_path
+			end
 		# when :payment
 		# 	@reservation.update(reservation_payment_params)
 		when :summary
-			@reservation.update({status: "pending"})
+			if @reservation.res_type == 'maintenance'
+				@reservation.update({status: 'maintenance'})
+				skip_step
+			elsif @reservation.res_type == 'offline'
+				@reservation.update({status: 'reserved'})
+				skip_step	
+			else
+				@reservation.update({status: "pending"})
+			end
 		end
 
 		render_wizard @reservation

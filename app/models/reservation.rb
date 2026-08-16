@@ -2,13 +2,14 @@ class Reservation < ApplicationRecord
   extend FriendlyId
   friendly_id :reservation_slug, use: :slugged
 
-  belongs_to :customer
+  belongs_to :customer, optional: true
   belongs_to :vehicle
   
   attr_accessor :current_step
 
   STEPS = %w[ dates collection return summary ].freeze
   RESERVATION_TYPES = ["maintenance", "offline", "online"]
+  ADMIN_RESERVATION_TYPES = ["maintenance", "offline"]
 
   validates :collection_location, presence: { message: "A location must be selected before continuing" }, if: -> { required_for_step?(:collection) && self.res_type != "maintenance" }
   validates :return_location, presence: { message: "A location must be selected before continuing" }, if: -> { required_for_step?(:return) && self.res_type != "maintenance" }
@@ -26,6 +27,17 @@ class Reservation < ApplicationRecord
 
   def subtotal
     return (self.vehicle.daily_rate * self.period)
+  end
+
+  def total
+    total = self.subtotal
+    if self.collection_location.nil? && Location.find(self.collection_location).additional_cost > 0
+      total += Location.find(self.collection_location).additional_cost.to_f
+    end
+    if self.return_location &&Location.find(self.return_location).additional_cost > 0
+      total += Location.find(self.return_location).additional_cost.to_f
+    end
+    return total
   end
 
   def valid_dates? 

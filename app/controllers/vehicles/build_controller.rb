@@ -55,7 +55,7 @@ class Vehicles::BuildController < ApplicationController
 		end
 
 		def validate_renter
-			if @vehicle.company.renter_id != current_renter.id
+			if Vehicle.friendly.find(params[:vehicle_id]).company.renter_id != current_renter.id
 				respond_to do |format|
 					format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
 					format.json { head :no_content }

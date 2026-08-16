@@ -157,14 +157,37 @@
                 <h1>Summary</h1>
                 <% if request.subdomain == "admin" %>
                   <div class="row align-items-center mt-4">
-                    <span class="avatar avatar-lg ms-2 me-4 col-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                      </svg>
-                    </span>
-                    <span class="col"><strong>Rented to:</strong><br><%= @reservation.customer.full_name %></span>
+                    <% if !@reservation.customer.nil? %>
+                      <span class="avatar avatar-lg ms-2 me-4 col-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                        </svg>
+                      </span>
+                      <span class="col"><strong>Rented to:</strong><br><%= @reservation.customer.full_name %></span>
+                    <% elsif @reservation.res_type == "maintenance" %>
+                      <span class="avatar avatar-lg ms-2 me-4 col-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-tool">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" />
+                        </svg>
+                      </span>
+                      <span class="col"><strong>Out for Maintenance</strong></span>
+                    <% elsif @reservation.res_type == "offline" %>
+                      <span class="avatar avatar-lg ms-2 me-4 col-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-world-off">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M5.657 5.615a9 9 0 1 0 12.717 12.739m1.672 -2.322a9 9 0 0 0 -12.066 -12.084" />
+                          <path d="M3.6 9h5.4m4 0h7.4" />
+                          <path d="M3.6 15h11.4m4 0h1.4" />
+                          <path d="M11.5 3a17.001 17.001 0 0 0 -1.493 3.022m-.847 3.145c-.68 4.027 .1 8.244 2.34 11.833" />
+                          <path d="M12.5 3a16.982 16.982 0 0 1 2.549 8.005m-.207 3.818a16.979 16.979 0 0 1 -2.342 6.177" />
+                          <path d="M3 3l18 18" />
+                        </svg>                        
+                      </span>
+                      <span class="col"><strong>Offline Booking</strong></span>
+                    <% end %>
                   </div>
                   <hr class="mt-4 mb-3">
                 <% end %>
@@ -173,44 +196,69 @@
                     <span><strong>Dates</strong></span>
                     <p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
                   </div>
-                  <% if request.subdomain != "admin" %>
+                  <% if request.subdomain != "admin" || (request.subdomain == "admin" && @reservation.res_type != "online") %>
                     <div class="col text-end">
                       <%= link_to "Change Dates", vehicle_url(@reservation.vehicle, reservation_id: @reservation.slug), class: "btn" %>
                     </div>
                   <% end %>
                 </div>
-                <hr class="my-2">
-                <div class="row align-items-center my-4">
-                  <div class="col">
-                    <span><strong>Collection Location</strong></span>
-                    <p class="mb-0"><%= Location.find(@reservation.collection_location).name if !@reservation.collection_location.nil? %></p>
-                  </div>
-                  <% if request.subdomain != "admin" %>
-                    <div class="col text-end">
-                      <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :collection), class: "btn" %>
+                <% if !@reservation.collection_location.nil? %>
+                  <hr class="my-2">
+                  <div class="row align-items-center my-4">
+                    <div class="col">
+                      <span><strong>Collection Location</strong></span>
+                      <p class="mb-0"><%= Location.find(@reservation.collection_location).name if !@reservation.collection_location.nil? %></p>
                     </div>
-                  <% end %>
-                </div>
-                <hr class="mt-2 mb-4">
-                <div class="row align-items-center my-4">
-                  <div class="col">
-                    <span><strong>Return Location</strong></span>
-                    <p class="mb-0"><%= Location.find(@reservation.return_location).name if !@reservation.return_location.nil? %></p>
+                    <% if request.subdomain != "admin" || (request.subdomain == "admin" && @reservation.res_type != "online") %>
+                      <div class="col text-end">
+                        <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :collection), class: "btn" %>
+                      </div>
+                    <% end %>
                   </div>
-                  <% if request.subdomain != "admin" %>
-                    <div class="col text-end">
-                      <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :return), class: "btn" %>
+                <% end %>
+                <% if !@reservation.return_location.nil? %>
+                  <hr class="mt-2 mb-4">
+                  <div class="row align-items-center my-4">
+                    <div class="col">
+                      <span><strong>Return Location</strong></span>
+                      <p class="mb-0"><%= Location.find(@reservation.return_location).name if !@reservation.return_location.nil? %></p>
                     </div>
-                  <% end %>
-                </div>
+                    <% if request.subdomain != "admin" || (request.subdomain == "admin" && @reservation.res_type != "online") %>
+                      <div class="col text-end">
+                        <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :return), class: "btn" %>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
                 <hr class="mt-2 mb-4">
-                <span><strong>Price Details</strong></span>
+                <% if @reservation.res_type == "maintenance" %>
+                  <span><strong>Loss of Use</strong></span>
+                <% else %>
+                  <span><strong>Price Details</strong></span>
+                <% end %>
                 <table class="w-100">
                   <tbody>
                     <tr>
                       <td><%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %> x <%= number_to_currency(@reservation.vehicle.daily_rate, :unit => "$") %></td>
                       <td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>
                     </tr>
+                    <% if !@reservation.collection_location.nil? && !@reservation.return_location.nil? && (Location.find(@reservation.collection_location).additional_cost > 0 || Location.find(@reservation.return_location).additional_cost > 0) %>
+                      <tr>
+                        <td colspan="2"><strong>Additional Costs</strong></td>
+                      </tr>
+                    <% end %>
+                    <% if !@reservation.collection_location.nil? && Location.find(@reservation.collection_location).additional_cost > 0 %>
+                      <tr>
+                        <td>Collection Location - (<%= Location.find(@reservation.collection_location).name %>)</td>
+                        <td class="text-end"><%= number_to_currency(Location.find(@reservation.collection_location).additional_cost, :unit => "+ XCD $") %></td>
+                      </tr>
+                    <% end %>
+                    <% if !@reservation.return_location.nil? && Location.find(@reservation.return_location).additional_cost > 0 %>
+                      <tr>
+                        <td>Return Location - (<%= Location.find(@reservation.return_location).name %>)</td>
+                        <td class="text-end"><%= number_to_currency(Location.find(@reservation.return_location).additional_cost, :unit => "+ XCD $") %></td>
+                      </tr>
+                    <% end %>
                     <tr>
                       <td><strong>Total</strong></td>
                       <td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>                    

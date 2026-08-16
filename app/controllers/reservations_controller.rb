@@ -23,7 +23,7 @@ class ReservationsController < ApplicationController
 
   # POST /reservations or /reservations.json
   def create
-    if current_customer.nil?
+    if current_customer.nil? && request.subdomain != "admin"
       redirect_to new_customer_session_url, alert: "Please log in to make any reservations."
     else
       if reservation_params[:slug].present?

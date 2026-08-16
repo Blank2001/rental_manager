@@ -9,6 +9,7 @@
                     <div class="card-body">
                         <%= render "layouts/errors", obj: @location %>
                         <%= f.input :name %>
+                        <%= f.input :additional_cost %>
                         <%= f.input :is_default %>
                         <%= f.input :allows_collection %>
                         <%= f.input :allows_return %>

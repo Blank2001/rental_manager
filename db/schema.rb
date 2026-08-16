@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_10_194743) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_16_211605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -98,6 +98,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_194743) do
   end
 
   create_table "locations", force: :cascade do |t|
+    t.float "additional_cost", default: 0.0
     t.boolean "allows_collection", default: true
     t.boolean "allows_return", default: true
     t.bigint "company_id", null: false
