@@ -6,6 +6,18 @@
     </h1>
     <% if !current_customer.nil? %>
       <div class="navbar-nav flex-row order-md-last">
+        <div class="d-none d-md-flex mx-2">
+          <%= link_to reservations_url, class: "nav-link px-0 mx-2 " do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event text-primary">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
+              <path d="M16 3l0 4" />
+              <path d="M8 3l0 4" />
+              <path d="M4 11l16 0" />
+              <path d="M8 15h2v2h-2l0 -2" />
+            </svg>
+          <% end %>
+        </div>
         <div class="nav-item dropdown">
           <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
             <span class="avatar avatar-sm bg-white"><%= current_customer.initials %></span>
@@ -15,6 +27,7 @@
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <%= link_to 'Reservations', reservations_path, class:'dropdown-item' %>
             <hr class="my-0">
             <%= link_to 'Profile', customer_profile_path, class:'dropdown-item', "data-turbo": false %>
             <%= link_to 'Logout', destroy_customer_session_path, class:'dropdown-item', data: { turbo_method: :delete } %>

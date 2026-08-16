@@ -14,6 +14,9 @@ class VehiclesController < ApplicationController
     elsif request.subdomain != "admin" || request.subdomain != "console"
       if params[:reservation_id].present?
         @reservation = Reservation.friendly.find(params[:reservation_id])
+        if params[:reservation].present?
+          @reservation.update(reservation_params)
+        end
       elsif params[:reservation].present?
         @reservation = Reservation.new(reservation_params)
       else

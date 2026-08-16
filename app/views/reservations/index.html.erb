@@ -1,16 +1,20 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "Reservations" %>
-
-<h1>Reservations</h1>
-
-<div id="reservations">
-  <% @reservations.each do |reservation| %>
-    <%= render reservation %>
-    <p>
-      <%= link_to "Show this reservation", reservation %>
-    </p>
-  <% end %>
+<% if request.subdomain == "admin" %>
+  <%= render 'layouts/renter_navbar' %>
+<% else %>
+  <%= render 'layouts/navbar' %>
+<% end %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body mt-0">
+    <div class="container-xl">
+      <%= render 'layouts/messages' %> 
+      <% content_for :title, "Reservations" %>
+      <h1>Reservations</h1>
+      <div id="reservations">
+        <% @reservations.each do |reservation| %>
+            <%= render reservation %>
+        <% end %>
+      </div>
+    </div>
+  </div> 
+  <%= render 'layouts/footer' %> 
 </div>
-
-<%= link_to "New reservation", new_reservation_path %>

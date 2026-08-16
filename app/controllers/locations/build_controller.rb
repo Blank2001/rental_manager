@@ -1,6 +1,7 @@
 class Locations::BuildController < ApplicationController
 	include Wicked::Wizard
 	before_action :require_renter
+	before_action :validate_renter, except: %i[ create ]
 
 	steps :coordinates, :info
 
@@ -55,5 +56,14 @@ class Locations::BuildController < ApplicationController
 
 		def location_info_params
 			params.require(:location).permit(:name, :is_default, :allows_collection, :allows_return, :hidden)
+		end
+
+		def validate_renter
+			if @vehicle.company.renter_id != current_renter.id
+				respond_to do |format|
+					format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+					format.json { head :no_content }
+				end
+			end
 		end
 end

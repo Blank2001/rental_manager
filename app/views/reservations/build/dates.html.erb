@@ -10,6 +10,7 @@
 		          <div class="d-flex flex-column flex-grow-1 text-start me-2">
 		            <label class="form-label text-uppercase text-dark tracking-wider mt-2 mb-0" style="font-size:.7rem;font-weight:700;">Return Date</label>
 		            <%= f.input :return_date, label: false, required: false, placeholder: "Add dates", input_html: { id: "booking_return_date_input", value: @reservation.return_date, readonly: true, class: "form-control form-control-flush p-0 bg-transparent text-sm text-muted shadow-none border-0 pe-none" }, wrapper_html: { class: "mb-0" } %>
+		            <%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : (params[:search][:slug].present? ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id] || !@reservation.slug.nil? || params[:search][:slug].present?) %> 
 		          </div>
 		        </div>
 		    </div>
@@ -18,7 +19,7 @@
 			<hr class="mt-0 mb-2">
 			<h1 class="text-center ms-2"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %> for <%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %></h1>
 			<hr class="my-2">
-			<%= simple_form_for(@reservation, html: { method: :post, data: { turbo: false }, class: "w-100" }) do |f| %>
+			<%= simple_form_for(@reservation, url: reservations_path, html: { method: :post, data: { turbo: false }, class: "w-100" }) do |f| %>
 				<%= f.input :collection_date, input_html: { value: @reservation.collection_date }, as: :hidden %>
 				<%= f.input :return_date, input_html: { value: @reservation.return_date }, as: :hidden %>
 				<%= f.input :customer_id, input_html: { value: current_customer.id }, as: :hidden if !current_customer.nil? %>
@@ -29,6 +30,7 @@
 				<% else %>
 				<%= f.input :res_type, input_html: { value: "online" }, as: :hidden %>
 				<% end %>
+				<%= f.input :slug, input_html: { value: params[:reservation_id].present? ? params[:reservation_id] : (params[:search][:slug].present? ? params[:search][:slug] : @reservation.slug) }, as: :hidden if (params[:reservation_id] || !@reservation.slug.nil? || params[:search][:slug].present?) %> 
 				<div class="text-center">
 					<%= f.button :submit, "Reserve", class: "btn btn-primary rounded-pill text-center fw-bold w-75 mx-2 pb-2 mb-4", data: { disable_with: "<div class='spinner-border spinner-border-sm' role='status'></div> Loading..." } %>
 				</div>

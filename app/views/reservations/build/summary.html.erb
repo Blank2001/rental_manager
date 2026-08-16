@@ -1,0 +1,81 @@
+<%= render 'layouts/navbar' %> 
+<div class="d-flex flex-column h-100 page-wrapper"> 
+  <div class="page-body mt-0"> 
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl"> 
+    	<div class="row justify-content-center">
+    		<div class="col-8">
+    			<div class="card">
+    				<div class="card-body">
+              <%= simple_form_for(@reservation, :url => wizard_path, html: { method: :put }, data: { turbo: false }) do |f| %>
+	              <div class="row">
+		              <div class="col-8">
+		                <h1 class="">Summary</h1>
+		    					</div>
+		    					<div class="col text-end">
+		    						<%= f.button :button, type: :submit, class: "btn btn-animate-icon btn-animate-icon-tada", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } do %>
+		    							<span class="me-2">Request Booking</span>
+		    							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-check text-success me-0">
+		    								<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			    							<path d="M5 12l5 5l10 -10" />
+			    						</svg>
+		    						<% end %>
+		    					</div>
+		    				</div>
+	    					<div class="row align-items-end">
+	    						<span class="avatar avatar-xl me-4 col-2" style="background-image: url('<%= url_for(@reservation.vehicle.photos.first.image) %>');"></span>
+	    						<span class="col"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong><br>From <%= @reservation.vehicle.company.name %></span>
+	    					</div>
+	    					<hr class="mt-4 mb-3">
+	    					<div class="row align-items-center my-4">
+	    						<div class="col">
+			    					<span><strong>Dates</strong></span>
+			    					<p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+			    				</div>
+			    				<div class="col text-end">
+			    					<%= link_to "Change Dates", vehicle_url(@reservation.vehicle, reservation_id: @reservation.slug), class: "btn" %>
+			    				</div>
+			    			</div>
+	    					<hr class="my-2">
+	    					<div class="row align-items-center my-4">
+	    						<div class="col">
+			    					<span><strong>Collection Location</strong></span>
+			    					<p class="mb-0"><%= Location.find(@reservation.collection_location).name if !@reservation.collection_location.nil? %></p>
+			    				</div>
+			    				<div class="col text-end">
+			    					<%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :collection), class: "btn" %>
+			    				</div>
+			    			</div>
+	    					<hr class="mt-2 mb-4">
+	    					<div class="row align-items-center my-4">
+	    						<div class="col">
+			    					<span><strong>Return Location</strong></span>
+			    					<p class="mb-0"><%= Location.find(@reservation.return_location).name if !@reservation.return_location.nil? %></p>
+			    				</div>
+			    				<div class="col text-end">
+			    					<%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :return), class: "btn" %>
+			    				</div>
+			    			</div>
+	    					<hr class="mt-2 mb-4">
+	    					<span><strong>Price Details</strong></span>
+	    					<table class="w-100">
+	    						<tbody>
+	    							<tr>
+	    								<td><%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %> x <%= number_to_currency(@reservation.vehicle.daily_rate, :unit => "$") %></td>
+	    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>
+	    							</tr>
+			    					<tr>
+			    						<td><strong>Total</strong></td>
+	    								<td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>		    						
+			    					</tr>
+	    						</tbody>
+	    					</table>
+    					<% end %>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div> 
+  </div> 
+  <%= render 'layouts/footer' %> 
+</div>

@@ -7,7 +7,7 @@ class Reservation < ApplicationRecord
   
   attr_accessor :current_step
 
-  STEPS = %w[ dates collection return  ].freeze
+  STEPS = %w[ dates collection return summary ].freeze
   RESERVATION_TYPES = ["maintenance", "offline", "online"]
 
   validates :collection_location, presence: { message: "A location must be selected before continuing" }, if: -> { required_for_step?(:collection) && self.res_type != "maintenance" }
@@ -61,5 +61,14 @@ class Reservation < ApplicationRecord
   def required_for_step?(step)
     return false if self.current_step.nil?
     STEPS.index(step.to_s) <= STEPS.index(self.current_step.to_s)
+  end
+
+  def status_colour
+    case self.status
+    when 'pending'
+      return 'yellow'
+    when nil
+      return 'muted'
+    end
   end
 end

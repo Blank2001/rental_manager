@@ -1,7 +1,7 @@
 class Reservations::BuildController < ApplicationController
 	include Wicked::Wizard
 
-	steps :dates, :collection, :return #, :payment
+	steps :dates, :collection, :return, :summary #, :payment
 
 	def show
 		@reservation = Reservation.friendly.find(params[:reservation_id])
@@ -27,6 +27,8 @@ class Reservations::BuildController < ApplicationController
 			@reservation.update(reservation_return_params)
 		# when :payment
 		# 	@reservation.update(reservation_payment_params)
+		when :summary
+			@reservation.update({status: "pending"})
 		end
 
 		render_wizard @reservation
@@ -38,7 +40,7 @@ class Reservations::BuildController < ApplicationController
 	end
 
 	def finish_wizard_path
-		return @reservation.company
+		return @reservation
 	end
 
 	private

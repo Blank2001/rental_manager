@@ -1,10 +1,254 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @reservation %>
-
-<div>
-  <%= link_to "Edit this reservation", edit_reservation_path(@reservation) %> |
-  <%= link_to "Back to reservations", reservations_path %>
-
-  <%= button_to "Destroy this reservation", @reservation, method: :delete %>
+<% if request.subdomain == "admin" %>
+  <%= render 'layouts/renter_navbar' %>
+<% else %>
+  <%= render 'layouts/navbar' %>
+<% end %>
+<div class="d-flex flex-column h-100 page-wrapper">
+  <div class="page-body mt-0">
+    <%= render 'layouts/messages' %> 
+    <div class="container-xl">
+      <div class="row">
+        <% if request.referrer.present? && URI(request.referer).path != request.path && URI(request.referer).path != reservation_build_path(reservation_id: @reservation.slug, id: :summary) %>
+          <span class="col-1">
+            <%= link_to :back, class: "btn btn-md btn-pill btn-animate-icon btn-animate-icon-shake" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M15 6l-6 6l6 6" />
+              </svg>
+              Back
+            <% end %>
+          </span>
+        <% end %>
+        <h1 class="text-primary display-6 mt-0 mb-4 ms-4 col"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong></h1>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-7">
+          <div class="card border-0 rounded-4 overflow-hidden h-100" style="min-height: 45vh; background-image: url(<%= @reservation.vehicle.photos.count > 0 ? @reservation.vehicle.photos.first.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;">
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @reservation.vehicle.photos.count > 1 ? @reservation.vehicle.photos.second.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @reservation.vehicle.photos.count > 2 ? @reservation.vehicle.photos.third.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3" style="min-height: 22vh; background-image: url(<%= @reservation.vehicle.photos.count > 3 ? @reservation.vehicle.photos.fourth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+            </div>
+            <div class="col-6">
+              <div class="card border-0 rounded-3 d-flex flex-column" style="min-height: 22vh; background-image: url(<%= @reservation.vehicle.photos.count > 4 ? @reservation.vehicle.photos.fifth.image_url : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=60' %>); background-size: cover; background-repeat: no-repeat; background-position: center;">
+                <% if @reservation.vehicle.photos.count > 0 %>
+                  <div class="mt-auto text-end p-3">
+                    <a class="btn" data-bs-toggle="offcanvas" href="#offcanvasBottom" role="button" aria-controls="offcanvasBottom">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-grid-dots">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M11 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                        <path d="M18 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                      </svg>
+                      View All Images
+                    </a>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="space-x">
+          <div class="col-7 row my-0 ms-4 pe-6" onclick="window.location.href = '<%= url_for(@reservation.vehicle.company) %>';">
+            <hr class="mt-4 mb-2">
+            <div class="avatar avatar-rounded avatar-xl my-2 mx-0<%= !@reservation.vehicle.company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+              <% if !@reservation.vehicle.company.logo.attached? %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M3 21l18 0" />
+                  <path d="M5 21v-14l8 -4v18" />
+                  <path d="M19 21v-10l-6 -4" />
+                  <path d="M9 9l0 .01" />
+                  <path d="M9 12l0 .01" />
+                  <path d="M9 15l0 .01" />
+                  <path d="M9 18l0 .01" />
+                </svg>
+              <% else %>
+                <%= image_tag(@reservation.vehicle.company.logo) %>
+              <% end %>
+            </div>
+            <div class="col mx-4 mt-4 mb-2">
+              <span class="text-muted">Rented from:</span>
+              <h1 class="text-primary fw-bold"><%= @reservation.vehicle.company.name %></h1>
+            </div>
+            <hr class="mt-2 mb-4">
+            <div class="space-y">
+              <div class="row">
+                <div class="space-x">
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M5 8l0 8" />
+                        <path d="M12 8l0 8" />
+                        <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @reservation.vehicle.transmission_type %></h1>
+                  </div>
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
+                        <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
+                        <path d="M3 20l12 0" />
+                        <path d="M18 7v1a1 1 0 0 0 1 1h1" />
+                        <path d="M4 11l10 0" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @reservation.vehicle.fuel_type %></h1>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="space-x">
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M13 14h2" />
+                        <path d="M19 10h-16" />
+                        <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @reservation.vehicle.doors %> Door</h1>
+                  </div>
+                  <div class="col-md-6 row align-items-center">
+                    <span class="avatar avatar-rounded avatar-lg col-auto">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                      </svg>
+                    </span>
+                    <h1 class="col-auto"><%= @reservation.vehicle.seats %> Seats</h1>
+                  </div>
+                </div>
+              </div>
+            </div>            
+          </div>
+          <div class="col-5 mt-4">
+            <div class="card">
+              <div class="card-body">
+                <h1>Summary</h1>
+                <% if request.subdomain == "admin" %>
+                  <div class="row align-items-center mt-4">
+                    <span class="avatar avatar-lg ms-2 me-4 col-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                      </svg>
+                    </span>
+                    <span class="col"><strong>Rented to:</strong><br><%= @reservation.customer.full_name %></span>
+                  </div>
+                  <hr class="mt-4 mb-3">
+                <% end %>
+                <div class="row align-items-center my-4">
+                  <div class="col">
+                    <span><strong>Dates</strong></span>
+                    <p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+                  </div>
+                  <% if request.subdomain != "admin" %>
+                    <div class="col text-end">
+                      <%= link_to "Change Dates", vehicle_url(@reservation.vehicle, reservation_id: @reservation.slug), class: "btn" %>
+                    </div>
+                  <% end %>
+                </div>
+                <hr class="my-2">
+                <div class="row align-items-center my-4">
+                  <div class="col">
+                    <span><strong>Collection Location</strong></span>
+                    <p class="mb-0"><%= Location.find(@reservation.collection_location).name if !@reservation.collection_location.nil? %></p>
+                  </div>
+                  <% if request.subdomain != "admin" %>
+                    <div class="col text-end">
+                      <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :collection), class: "btn" %>
+                    </div>
+                  <% end %>
+                </div>
+                <hr class="mt-2 mb-4">
+                <div class="row align-items-center my-4">
+                  <div class="col">
+                    <span><strong>Return Location</strong></span>
+                    <p class="mb-0"><%= Location.find(@reservation.return_location).name if !@reservation.return_location.nil? %></p>
+                  </div>
+                  <% if request.subdomain != "admin" %>
+                    <div class="col text-end">
+                      <%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :return), class: "btn" %>
+                    </div>
+                  <% end %>
+                </div>
+                <hr class="mt-2 mb-4">
+                <span><strong>Price Details</strong></span>
+                <table class="w-100">
+                  <tbody>
+                    <tr>
+                      <td><%= @reservation.period %> <%= @reservation.period > 1 ? 'days' : 'day' %> x <%= number_to_currency(@reservation.vehicle.daily_rate, :unit => "$") %></td>
+                      <td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Total</strong></td>
+                      <td class="text-end"><%= number_to_currency(@reservation.subtotal, :unit => "XCD $") %></td>                    
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% if @reservation.vehicle.photos.count > 0 %>
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" style="height: 90vh;">
+          <div class="offcanvas-header border-0 mb-0 pb-0">
+            <h2 class="offcanvas-title" id="offcanvasBottomLabel"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong></h2>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body mt-0">
+            <div class="row">
+              <div class="space-x">
+                <div class="col-4">
+                  <h3 class="display-6">All Images</h3>
+                </div>
+                <div class="col mt-2">
+                  <div class="space-y">
+                    <% @reservation.vehicle.photos.each do | photo | %>
+                      <div class="card border-0 rounded-3 overflow-hidden">
+                        <img src="<%= photo.image_url %>" class="img-fluid w-100" alt="Vehicle photo">
+                      </div>
+                    <% end %>
+                  </div>  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
 </div>

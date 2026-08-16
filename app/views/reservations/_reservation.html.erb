@@ -1,42 +1,37 @@
-<div id="<%= dom_id reservation %>">
-  <div>
-    <strong>Customer:</strong>
-    <%= reservation.customer_id %>
+<div id="<%= dom_id reservation %>" class="card" onClick="window.location.href = '<%= url_for(reservation) %>';">
+  <div class="ribbon bg-<%= reservation.status_colour %> align-items-center">
+    <% case reservation.status %>
+    <% when 'pending' %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock me-2">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+        <path d="M12 7v5l3 3" />
+      </svg>
+      <span class="me-2"><%= reservation.status %></span>
+    <% when nil%>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-x">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+        <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" />
+        <path d="M10 12l4 4m0 -4l-4 4" />
+      </svg>
+      <span class="me-2">Incomplete</span>
+    <% end %>
   </div>
-
-  <div>
-    <strong>Vehicle:</strong>
-    <%= reservation.vehicle_id %>
+  <div class="card-body p-0">
+    <div class="list-group list-group-flush">
+      <div class="list-group-item list-group-item-action d-flex align-items-center">
+        <div class="row align-items-center">
+          <span class="avatar avatar-2xl ms-2 me-4 col-2" style="background-image: url('<%= url_for(reservation.vehicle.photos.first.image) %>');"></span>
+          <div class="col">
+            <h1><%= reservation.vehicle.year %> <%= reservation.vehicle.brand %> <%= reservation.vehicle.model %></h1>
+            <div><span><strong>Dates:</strong> <%= format_date_range(reservation.collection_date, reservation.return_date) %></span></div>
+            <div><span><strong>Collection Location:</strong> <%= Location.find(reservation.collection_location).name if !reservation.collection_location.nil? %></span></div>
+            <div><span><strong>Return Location:</strong> <%= Location.find(reservation.return_location).name if !reservation.return_location.nil? %></span></div>
+            <div><span class="text-success"><strong class="text-black">Cost:</strong> <%= number_to_currency(reservation.subtotal, :unit => "XCD $") %></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div>
-    <strong>Collection date:</strong>
-    <%= reservation.collection_date %>
-  </div>
-
-  <div>
-    <strong>Return date:</strong>
-    <%= reservation.return_date %>
-  </div>
-
-  <div>
-    <strong>Collection location:</strong>
-    <%= reservation.collection_location %>
-  </div>
-
-  <div>
-    <strong>Return location:</strong>
-    <%= reservation.return_location %>
-  </div>
-
-  <div>
-    <strong>Status:</strong>
-    <%= reservation.status %>
-  </div>
-
-  <div>
-    <strong>Cost:</strong>
-    <%= reservation.cost %>
-  </div>
-
 </div>

@@ -1,6 +1,7 @@
 class Vehicles::BuildController < ApplicationController
 	include Wicked::Wizard
 	before_action :require_renter
+	before_action :validate_renter, except: %i[ create ]
 
 	steps :basics, :specifications, :pricing
 
@@ -51,5 +52,14 @@ class Vehicles::BuildController < ApplicationController
 
 		def vehicle_pricing_params
 			params.require(:vehicle).permit(:minimum_days, :daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable)
+		end
+
+		def validate_renter
+			if @vehicle.company.renter_id != current_renter.id
+				respond_to do |format|
+					format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+					format.json { head :no_content }
+				end
+			end
 		end
 end

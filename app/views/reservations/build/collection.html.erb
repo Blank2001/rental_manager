@@ -14,7 +14,14 @@
 		                <p class="ms-4 text-muted"> Please select the location you would like to collect your rental from:</p>
 		    					</div>
 		    					<div class="col text-end me-4">
-		    						<%= f.button :submit, "Proceed", class: "btn", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+		    						<%= f.button :button, type: :submit, class: "btn btn-animate-icon", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } do %>
+		    							<span class="me-2">Rental Return Location</span>
+		    							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevrons-right me-0">
+		    								<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			    							<path d="M7 7l5 5l-5 5" />
+			    							<path d="M13 7l5 5l-5 5" />
+		    							</svg>
+		    						<% end %>
 		    					</div>
 		    				</div>
 		    				<%= render 'layouts/errors', obj: @reservation %>
@@ -51,8 +58,15 @@
     						<span class="col"><strong><%= @reservation.vehicle.year %> <%= @reservation.vehicle.brand %> <%= @reservation.vehicle.model %></strong><br>From <%= @reservation.vehicle.company.name %></span>
     					</div>
     					<hr class="mt-4 mb-3">
-    					<span><strong>Dates</strong></span>
-    					<p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+    					<div class="row align-items-center my-4">
+    						<div class="col">
+		    					<span><strong>Dates</strong></span>
+		    					<p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+		    				</div>
+		    				<div class="col text-end">
+		    					<%= link_to "Change Dates", vehicle_url(@reservation.vehicle, reservation_id: @reservation.slug), class: "btn" %>
+		    				</div>
+		    			</div>
     					<hr class="mt-2 mb-4">
     					<span><strong>Price Details</strong></span>
     					<table class="w-100">
