@@ -23,6 +23,8 @@ class Reservations::BuildController < ApplicationController
 			@reservation.update(reservation_dates_params)
 		when :collection
 			@reservation.update(reservation_collection_params)
+		when :return
+			@reservation.update(reservation_return_params)
 		# when :payment
 		# 	@reservation.update(reservation_payment_params)
 		end
@@ -45,7 +47,11 @@ class Reservations::BuildController < ApplicationController
 		end
 
 		def reservation_collection_params
-			params.require(:reservation).permit(:collection_location)
+			params.fetch(:reservation, {}).permit(:collection_location)
+		end
+
+		def reservation_return_params
+			params.fetch(:reservation, {}).permit(:return_location)
 		end
 
 		# def reservation_payment_params

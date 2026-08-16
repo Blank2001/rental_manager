@@ -26,7 +26,7 @@ class ReservationsController < ApplicationController
     else
       @reservation = Reservation.new(reservation_params)
       if @reservation.save
-        redirect_to reservation_build_url(reservation_id: @reservation.slug, id: :location)
+        redirect_to reservation_build_url(reservation_id: @reservation.slug, id: :collection)
       else
         respond_to do |format|
           format.html { redirect_to vehicle_path(@reservation.vehicle, reservation: @reservation.as_json(except: [:created_at, :slug, :updated_at, :id])), alert: @reservation.errors.full_messages.to_sentence, status: :see_other }

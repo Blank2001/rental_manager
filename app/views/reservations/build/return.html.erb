@@ -14,12 +14,12 @@
 		                <p class="ms-4 text-muted"> Please select the location you would like to collect your rental from:</p>
 		    					</div>
 		    					<div class="col text-end me-4">
-		    						<%= f.button :submit, "Proceed", class: "btn", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
+		    						<%= f.button :submit, "Continue to Summary", class: "btn", :data => { disable_with: "<div class="'spinner-border'" role="'status'"></div>loading..." } %>
 		    					</div>
 		    				</div>
 		    				<%= render 'layouts/errors', obj: @reservation %>
 	    					<div class="list-group list-group-flush ps-4" data-controller="location-selector">
-									<% @reservation.vehicle.company.collection_locations.each do |location| %>
+									<% @reservation.vehicle.company.return_locations.each do |location| %>
 										<div class="list-group-item list-group-item-action d-flex align-items-center">
 											<iframe
 								        width="50%"
@@ -33,7 +33,7 @@
 											<label class="w-50" data-location-selector-target="option">
 												<div class="flex-fill row">
 													<div class="fw-bold col-8 ms-4"><%= location.name %></div>
-													<%= f.radio_button :collection_location, location.id, class: "form-check-input col-auto ms-3", data: { action: "change->location-selector#select" } %>
+													<%= f.radio_button :return_location, location.id, class: "form-check-input col-auto ms-3", data: { action: "change->location-selector#select" } %>
 												</div>
 											</label>
 										</div>
@@ -53,6 +53,16 @@
     					<hr class="mt-4 mb-3">
     					<span><strong>Dates</strong></span>
     					<p><%= format_date_range(@reservation.collection_date, @reservation.return_date) %></p>
+    					<hr class="my-2">
+    					<div class="row align-items-center my-4">
+    						<div class="col">
+		    					<span><strong>Collection Location</strong></span>
+		    					<p class="mb-0"><%= Location.find(@reservation.collection_location).name if !@reservation.collection_location.nil? %></p>
+		    				</div>
+		    				<div class="col text-end">
+		    					<%= link_to "Change Location", reservation_build_url(reservation_id: @reservation.slug, id: :collection), class: "btn" %>
+		    				</div>
+		    			</div>
     					<hr class="mt-2 mb-4">
     					<span><strong>Price Details</strong></span>
     					<table class="w-100">

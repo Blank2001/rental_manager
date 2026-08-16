@@ -10,7 +10,8 @@ class Reservation < ApplicationRecord
   STEPS = %w[ dates collection return  ].freeze
   RESERVATION_TYPES = ["maintenance", "offline", "online"]
 
-  validates :collection_date, :return_date, presence: true, numericality: true, if: -> { required_for_step?(:dates) }
+  validates :collection_location, presence: { message: "A location must be selected before continuing" }, if: -> { required_for_step?(:collection) && self.res_type != "maintenance" }
+  validates :return_location, presence: { message: "A location must be selected before continuing" }, if: -> { required_for_step?(:return) && self.res_type != "maintenance" }
   validate :valid_dates?
   validate :valid_rental_period?
   validate :vehicle_available?
@@ -49,7 +50,7 @@ class Reservation < ApplicationRecord
   end
 
   def vehicle_available?
-    if self.vehicle.reservations.where(vehicle_id: self.vehicle_id, collection_date: collection_date..return_date, return_date: collection_date..return_date).none?
+    if self.vehicle.reservations.where.not(id: self.id).where(vehicle_id: self.vehicle_id, collection_date: collection_date..return_date, return_date: collection_date..return_date).none?
       return true
     else
       errors.add(:base, "The vehicle is currently not available")

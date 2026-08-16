@@ -5,14 +5,22 @@ export default class extends Controller {
 
   select(event) {
     this.optionTargets.forEach((option) => {
-      option.classList.remove("active")
+      const container = option.closest(".list-group-item")
+      if (container) {
+        container.classList.remove("active")
+      }
       option.removeAttribute("aria-current")
     })
 
-    const selectedOption = event.target.closest(".location-option") ||
-                           event.target.closest("label")
+    const currentLabel = event.currentTarget.closest("label")
+    const currentContainer = event.currentTarget.closest(".list-group-item")
 
-    selectedOption.classList.add("active")
-    selectedOption.setAttribute("aria-current", "true")
+    if (currentContainer) {
+      currentContainer.classList.add("active")
+    }
+    
+    if (currentLabel) {
+      currentLabel.setAttribute("aria-current", "true")
+    }
   }
 }
