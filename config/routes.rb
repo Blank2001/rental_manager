@@ -26,6 +26,10 @@ Rails.application.routes.draw do
   
   resources :reservations, except: [:new, :edit, :update] do
     resources :build, only: [:show, :update], controller: 'reservations/build'
+    member do
+      post 'accept'
+      post 'decline'
+    end
   end
   resources :companies, except: [:index]
   resources :vehicles, except: [:index, :new, :edit, :update] do
@@ -34,6 +38,8 @@ Rails.application.routes.draw do
       get 'photos'
       post 'add_photo'
       patch 'reorder_photos'
+      post 'publish'
+      post 'hide'
     end
   end
 

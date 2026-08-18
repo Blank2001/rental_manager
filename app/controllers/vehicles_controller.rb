@@ -1,12 +1,13 @@
 class VehiclesController < ApplicationController
-  before_action :set_vehicle, only: %i[ show destroy photos add_photo reorder_photos]
-  before_action :require_renter, except: %i[ show ]
-  before_action :validate_renter, only: %i[ destroy photos add_photo reorder_photos]
+  before_action :set_vehicle, only: %i[ show destroy photos add_photo reorder_photos publish hide ]
+  before_action :require_renter, except: %i[ destroy photos add_photo reorder_photos publish hide ]
+  before_action :validate_renter, only: %i[ destroy photos add_photo reorder_photos publish hide ]
+  before_action :validate_published, only: %i[ show ]
 
   # GET /vehicles or /vehicles.json
-  def index
-    @vehicles = Vehicle.all
-  end
+  # def index
+  #   @vehicles = Vehicle.all
+  # end
 
   # GET /vehicles/1 or /vehicles/1.json
   def show
@@ -83,8 +84,30 @@ class VehiclesController < ApplicationController
     params[:ids].each_with_index do |id, photo_index|
       @vehicle.photos.find(id).update!(position: photo_index + 1)
     end
-    
     head :ok
+  end
+
+  def publish
+    if @vehicle.photos.count >= 5
+      @vehicle.update({published: true})
+      respond_to do |format|
+        format.html { redirect_to vehicles_path(@vehicle), notice: "#{@vehicle.year} #{@vehicle.brand} #{@vehicle.model} was published", status: :see_other }
+        format.json { render :show, status: :ok, location: @vehicle }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to vehicles_path(@vehicle), alert: "Add #{5 - @vehicle.photos.count} #{(5 - @vehicle.photos.count) == 1 ? "photo" : "photo".pluralize} to #{@vehicle.year} #{@vehicle.brand} #{@vehicle.model} before publishing", status: :see_other }
+      format.json { head :no_content }
+      end
+    end
+  end
+
+  def hide
+    @vehicle.update({published: false})
+    respond_to do |format|
+      format.html { redirect_to vehicles_path(@vehicle), notice: "#{@vehicle.year} #{@vehicle.brand} #{@vehicle.model} was hidden from the public", status: :see_other }
+      format.json { render :show, status: :ok, location: @vehicle }
+    end
   end
 
   # DELETE /vehicles/1 or /vehicles/1.json
@@ -120,6 +143,15 @@ class VehiclesController < ApplicationController
       if @vehicle.company.renter_id != current_renter.id
         respond_to do |format|
           format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+          format.json { head :no_content }
+        end
+      end
+    end
+
+    def validate_published
+      if request.subdomain != "admin" && !@vehicle.published
+        respond_to do |format|
+          format.html { redirect_to root_url, alert: "This vehicle is not available", status: :see_other }
           format.json { head :no_content }
         end
       end

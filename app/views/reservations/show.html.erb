@@ -67,130 +67,158 @@
         <div class="space-x">
           <div class="col-7 row my-0 ms-4 pe-6" onclick="window.location.href = '<%= url_for(@reservation.vehicle.company) %>';">
             <hr class="mt-4 mb-2">
-            <div class="avatar avatar-rounded avatar-xl my-2 mx-0<%= !@reservation.vehicle.company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
-              <% if !@reservation.vehicle.company.logo.attached? %>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 21l18 0" />
-                  <path d="M5 21v-14l8 -4v18" />
-                  <path d="M19 21v-10l-6 -4" />
-                  <path d="M9 9l0 .01" />
-                  <path d="M9 12l0 .01" />
-                  <path d="M9 15l0 .01" />
-                  <path d="M9 18l0 .01" />
-                </svg>
-              <% else %>
-                <%= image_tag(@reservation.vehicle.company.logo) %>
+            <% if request.subdomain == "admin" %>
+              <div class="row align-items-center mt-4">
+                <% if !@reservation.customer.nil? %>
+                  <span class="avatar avatar-xl ms-2 me-2 col-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user text-<%= @reservation.status_colour %>">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                    </svg>
+                  </span>
+                  <div class="col mx-4 mt-4 mb-2">
+                    <span class="text-muted"><%= @reservation.status == "pending" ? "Requested by" : "Rented to" %>:</span>
+                    <h1 class="text-<%= @reservation.status_colour %> fw-bold"><%= @reservation.customer.full_name %></h1>
+                  </div>
+                <% elsif @reservation.res_type == "maintenance" %>
+                  <span class="avatar avatar-xl ms-2 me-0 col-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-tool text-yellow">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" />
+                    </svg>
+                  </span>
+                  <h1 class="text-yellow fw-bold col mt-2 mx-4">Out for Maintenance</h1>
+                <% elsif @reservation.res_type == "offline" %>
+                  <span class="avatar avatar-lg ms-2 me-0 col-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-world-off text-green">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M5.657 5.615a9 9 0 1 0 12.717 12.739m1.672 -2.322a9 9 0 0 0 -12.066 -12.084" />
+                      <path d="M3.6 9h5.4m4 0h7.4" />
+                      <path d="M3.6 15h11.4m4 0h1.4" />
+                      <path d="M11.5 3a17.001 17.001 0 0 0 -1.493 3.022m-.847 3.145c-.68 4.027 .1 8.244 2.34 11.833" />
+                      <path d="M12.5 3a16.982 16.982 0 0 1 2.549 8.005m-.207 3.818a16.979 16.979 0 0 1 -2.342 6.177" />
+                      <path d="M3 3l18 18" />
+                    </svg>                        
+                  </span>
+                  <h1 class="text-green fw-bold col mt-2 mx-4">Offline Booking</h1>
+                <% end %>
+              </div>
+              <% if @reservation.status == "pending" %>
+                <hr class="mt-4 mb-3">
+                <h2 class="text-center mt-6">Reservation Decision</h2>
+                <div class="row justify-content-center align-items-center my-6">
+                  <div class="col mb-6 text-center">
+                    <%= link_to accept_reservation_path(@reservation), "data-turbo-method": :post, class: "btn btn-pill btn-info px-6 mb-6" do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-check">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 12l5 5l10 -10" />
+                      </svg>
+                      Accept
+                    <% end %>
+                  </div>
+                  <div class="col mb-6 text-center">
+                    <%= link_to decline_reservation_path(@reservation), "data-turbo-method": :post, class: "btn btn-pill btn-danger px-6 mb-6" do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M18 6l-12 12" />
+                        <path d="M6 6l12 12" />
+                      </svg>
+                      Decline
+                    <% end %>
+                  </div>
+                </div>
               <% end %>
-            </div>
-            <div class="col mx-4 mt-4 mb-2">
-              <span class="text-muted">Rented from:</span>
-              <h1 class="text-primary fw-bold"><%= @reservation.vehicle.company.name %></h1>
-            </div>
-            <hr class="mt-2 mb-4">
-            <div class="space-y">
-              <div class="row">
-                <div class="space-x">
-                  <div class="col-md-6 row align-items-center">
-                    <span class="avatar avatar-rounded avatar-lg col-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M5 8l0 8" />
-                        <path d="M12 8l0 8" />
-                        <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
-                      </svg>
-                    </span>
-                    <h1 class="col-auto"><%= @reservation.vehicle.transmission_type %></h1>
-                  </div>
-                  <div class="col-md-6 row align-items-center">
-                    <span class="avatar avatar-rounded avatar-lg col-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
-                        <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
-                        <path d="M3 20l12 0" />
-                        <path d="M18 7v1a1 1 0 0 0 1 1h1" />
-                        <path d="M4 11l10 0" />
-                      </svg>
-                    </span>
-                    <h1 class="col-auto"><%= @reservation.vehicle.fuel_type %></h1>
+            <% else %>
+              <div class="avatar avatar-rounded avatar-xl my-2 mx-0<%= !@reservation.vehicle.company.logo.attached? ? ' bg-primary' : '' %> text-white col-2">
+                <% if !@reservation.vehicle.company.logo.attached? %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper text-primary">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 21l18 0" />
+                    <path d="M5 21v-14l8 -4v18" />
+                    <path d="M19 21v-10l-6 -4" />
+                    <path d="M9 9l0 .01" />
+                    <path d="M9 12l0 .01" />
+                    <path d="M9 15l0 .01" />
+                    <path d="M9 18l0 .01" />
+                  </svg>
+                <% else %>
+                  <%= image_tag(@reservation.vehicle.company.logo) %>
+                <% end %>
+              </div>
+              <div class="col mx-4 mt-4 mb-2">
+                <span class="text-muted">Rented from:</span>
+                <h1 class="text-primary fw-bold"><%= @reservation.vehicle.company.name %></h1>
+              </div>
+              <hr class="mt-2 mb-4">
+              <div class="space-y">
+                <div class="row">
+                  <div class="space-x">
+                    <div class="col-md-6 row align-items-center">
+                      <span class="avatar avatar-rounded avatar-lg col-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-manual-gearbox">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M3 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                          <path d="M10 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                          <path d="M17 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                          <path d="M3 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                          <path d="M10 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                          <path d="M5 8l0 8" />
+                          <path d="M12 8l0 8" />
+                          <path d="M19 8v2a2 2 0 0 1 -2 2h-12" />
+                        </svg>
+                      </span>
+                      <h1 class="col-auto"><%= @reservation.vehicle.transmission_type %></h1>
+                    </div>
+                    <div class="col-md-6 row align-items-center">
+                      <span class="avatar avatar-rounded avatar-lg col-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gas-station">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" />
+                          <path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
+                          <path d="M3 20l12 0" />
+                          <path d="M18 7v1a1 1 0 0 0 1 1h1" />
+                          <path d="M4 11l10 0" />
+                        </svg>
+                      </span>
+                      <h1 class="col-auto"><%= @reservation.vehicle.fuel_type %></h1>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="space-x">
-                  <div class="col-md-6 row align-items-center">
-                    <span class="avatar avatar-rounded avatar-lg col-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M13 14h2" />
-                        <path d="M19 10h-16" />
-                        <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
-                      </svg>
-                    </span>
-                    <h1 class="col-auto"><%= @reservation.vehicle.doors %> Door</h1>
-                  </div>
-                  <div class="col-md-6 row align-items-center">
-                    <span class="avatar avatar-rounded avatar-lg col-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                      </svg>
-                    </span>
-                    <h1 class="col-auto"><%= @reservation.vehicle.seats %> Seats</h1>
+                <div class="row">
+                  <div class="space-x">
+                    <div class="col-md-6 row align-items-center">
+                      <span class="avatar avatar-rounded avatar-lg col-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-car-door">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M13 14h2" />
+                          <path d="M19 10h-16" />
+                          <path d="M6.7 3.45l-3.7 5.55v3.08a1 1 0 0 0 .85 1a6 6 0 0 1 5.15 5.92v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1 -1v-16a1 1 0 0 0 -1 -1h-10.46a1 1 0 0 0 -.84 .45" />
+                        </svg>
+                      </span>
+                      <h1 class="col-auto"><%= @reservation.vehicle.doors %> Door</h1>
+                    </div>
+                    <div class="col-md-6 row align-items-center">
+                      <span class="avatar avatar-rounded avatar-lg col-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                          <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                          <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                        </svg>
+                      </span>
+                      <h1 class="col-auto"><%= @reservation.vehicle.seats %> Seats</h1>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>            
+              </div> 
+            <% end %>          
           </div>
           <div class="col-5 mt-4">
             <div class="card">
               <div class="card-body">
                 <h1>Summary</h1>
-                <% if request.subdomain == "admin" %>
-                  <div class="row align-items-center mt-4">
-                    <% if !@reservation.customer.nil? %>
-                      <span class="avatar avatar-lg ms-2 me-4 col-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        </svg>
-                      </span>
-                      <span class="col"><strong>Rented to:</strong><br><%= @reservation.customer.full_name %></span>
-                    <% elsif @reservation.res_type == "maintenance" %>
-                      <span class="avatar avatar-lg ms-2 me-4 col-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-tool">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" />
-                        </svg>
-                      </span>
-                      <span class="col"><strong>Out for Maintenance</strong></span>
-                    <% elsif @reservation.res_type == "offline" %>
-                      <span class="avatar avatar-lg ms-2 me-4 col-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-world-off">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5.657 5.615a9 9 0 1 0 12.717 12.739m1.672 -2.322a9 9 0 0 0 -12.066 -12.084" />
-                          <path d="M3.6 9h5.4m4 0h7.4" />
-                          <path d="M3.6 15h11.4m4 0h1.4" />
-                          <path d="M11.5 3a17.001 17.001 0 0 0 -1.493 3.022m-.847 3.145c-.68 4.027 .1 8.244 2.34 11.833" />
-                          <path d="M12.5 3a16.982 16.982 0 0 1 2.549 8.005m-.207 3.818a16.979 16.979 0 0 1 -2.342 6.177" />
-                          <path d="M3 3l18 18" />
-                        </svg>                        
-                      </span>
-                      <span class="col"><strong>Offline Booking</strong></span>
-                    <% end %>
-                  </div>
-                  <hr class="mt-4 mb-3">
-                <% end %>
                 <div class="row align-items-center my-4">
                   <div class="col">
                     <span><strong>Dates</strong></span>

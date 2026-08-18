@@ -31,10 +31,10 @@ class Reservation < ApplicationRecord
 
   def total
     total = self.subtotal
-    if self.collection_location.nil? && Location.find(self.collection_location).additional_cost > 0
+    if !self.collection_location.nil? && Location.find(self.collection_location).additional_cost > 0
       total += Location.find(self.collection_location).additional_cost.to_f
     end
-    if self.return_location &&Location.find(self.return_location).additional_cost > 0
+    if !self.return_location.nil? && Location.find(self.return_location).additional_cost > 0
       total += Location.find(self.return_location).additional_cost.to_f
     end
     return total
@@ -77,6 +77,14 @@ class Reservation < ApplicationRecord
 
   def status_colour
     case self.status
+    when 'completed'
+      return 'primary'
+    when 'on-hire'
+      return 'info'
+    when 'reserved'
+      return 'green'
+    when 'declined'
+      return 'red'
     when 'pending'
       return 'yellow'
     when nil

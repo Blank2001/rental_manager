@@ -1,11 +1,15 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: %i[ show destroy ]
-  before_action :viewer_present?, only: %i[ index show ]
-  before_action :validate_viewer, only: %i[ show ]
+  before_action :set_reservation, only: %i[ show destroy accept decline ]
+  before_action :viewer_present?, only: %i[ index show accept decline ]
+  before_action :validate_viewer, only: %i[ show accept decline ]
 
   # GET /reservations or /reservations.json
   def index
-    @reservations = Reservation.all
+    if !current_customer.nil?
+      @reservations = Reservation.where(customer_id: current_customer.id)
+    elsif !current_renter.nil?
+      @reservations = current_renter.reservations
+    end
   end
 
   # GET /reservations/1 or /reservations/1.json
@@ -62,6 +66,25 @@ class ReservationsController < ApplicationController
   #     end
   #   end
   # end
+
+  def accept
+    respond_to do |format|
+      if @reservation.update({status: "reserved"})
+        @reservation.vehicle.where(collection_date: ..@reservation.return_date, return_date: @reservation.collection_date.., status: [nil, "pending"]).delete_all
+        format.html { redirect_to @reservation, notice: "Reservation was accepted.", status: :see_other }
+        format.json { render :show, status: :ok, location: @reservation }
+      end
+    end
+  end
+
+  def decline
+    respond_to do |format|
+      if @reservation.update({status: "declined"})
+        format.html { redirect_to @reservation, notice: "Reservation was declined.", status: :see_other }
+        format.json { render :show, status: :ok, location: @reservation }
+      end
+    end
+  end
 
   # DELETE /reservations/1 or /reservations/1.json
   def destroy

@@ -26,16 +26,16 @@ class Vehicle < ApplicationRecord
   end
 
   def self.available(collection_date, return_date)
-    self.where(id: all.select { |vehicle|
-      vehicle.reservations.where(collection_date: ..return_date, return_date: collection_date.. ).none?
+    self.where(published: true, id: all.select { |vehicle|
+      vehicle.reservations.where(collection_date: ..return_date, return_date: collection_date.., status: ["reserved", "on-hire"]).none?
     }.map(&:id))
   end
 
   def self.available_today
     today = Date.current
-    self.where(id: all.select { |vehicle|
+    self.where(published: true, id: all.select { |vehicle|
       target_return_date = today + vehicle.minimum_days.days
-      vehicle.reservations.where(collection_date:..target_return_date, return_date: today..).none?
+      vehicle.reservations.where(collection_date:..target_return_date, return_date: today.., status: ["reserved", "on-hire"]).none?
     }.map(&:id))
   end
 end

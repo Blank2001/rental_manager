@@ -1,5 +1,6 @@
 class Reservations::BuildController < ApplicationController
 	include Wicked::Wizard
+	before_action :validate_viewer
 
 	steps :dates, :collection, :return, :summary #, :payment
 
@@ -80,4 +81,22 @@ class Reservations::BuildController < ApplicationController
 		# def reservation_payment_params
 		# 	params.require(:reservation).permit(:daily_rate, :weekly_rate, :monthly_rate, :security_deposit, :security_deposit_applicable)
 		# end
+
+	    def validate_viewer
+			if request.subdomain == "admin"
+				if @reservation.vehicle.company.renter_id != current_renter.id
+					respond_to do |format|
+						format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+						format.json { head :no_content }
+					end
+				end
+			else
+				if @reservation.customer_id != current_customer.id
+					respond_to do |format|
+						format.html { redirect_to root_url, alert: "You do not have permission to view this page", status: :see_other }
+						format.json { head :no_content }
+					end
+				end
+			end
+	    end
 end

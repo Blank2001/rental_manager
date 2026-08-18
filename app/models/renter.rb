@@ -13,19 +13,19 @@ class Renter < ApplicationRecord
   end
   
   def maintenance_reservations
-    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: ..Date.today, return_date: Date.today.., res_type: ["maintenance"])
+    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: ..Date.today, return_date: Date.today.., res_type: ["maintenance"]).where.not(status: nil)
   end
   
   def on_hire_reservations
-    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: ..Date.today, return_date: Date.today.., res_type: ["offline", "online"])
+    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: ..Date.today, return_date: Date.today.., res_type: ["offline", "online"]).where.not(status: nil)
   end
 
   def upcoming_reservations
-    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: Date.today.., res_type: ["offline", "online"])
+    return Reservation.where(vehicle_id: self.vehicles.ids, collection_date: Date.today.., res_type: ["offline", "online"]).where.not(status: nil)
   end
 
   def reservations
-    return Reservation.where(vehicle_id: self.vehicles.ids, res_type: ["offline", "online"])
+    return Reservation.where(vehicle_id: self.vehicles.ids, res_type: ["offline", "online"]).where.not(status: nil)
   end
 
   def vehicles

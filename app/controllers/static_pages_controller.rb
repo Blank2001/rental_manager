@@ -9,9 +9,9 @@ class StaticPagesController < ApplicationController
         Company.where(country: params[:search][:location]).each do | company |
           company_vehicle_ids += company.vehicles.pluck(:id)
         end
-        @vehicles = Vehicle.where(id: company_vehicle_ids)
+        @vehicles = Vehicle.where(id: company_vehicle_ids, published: true)
       else
-        @vehicles = Vehicle.all
+        @vehicles = Vehicle.where(published: true)
       end
       if params[:search][:collection_date].present? && params[:search][:return_date].present?
         @vehicles = @vehicles.available(params[:search][:collection_date].to_date, params[:search][:return_date].to_date)
